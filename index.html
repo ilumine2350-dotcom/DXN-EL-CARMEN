@@ -65,7 +65,7 @@
     .admin-link { color: #888; text-decoration: none; cursor: pointer; }
     
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
-    .modal-content { background: white; padding: 25px; border-radius: 10px; width: 90%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-content { background: white; padding: 25px; border-radius: 10px; width: 90%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto; }
     .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 500; }
@@ -74,6 +74,7 @@
     .cart-item-btn { background: #ff4d4d; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
     
     .verify-box { background: var(--light); padding: 12px; border-radius: 6px; margin-bottom: 15px; border: 1px dashed var(--border); }
+    .admin-section { background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
   </style>
 </head>
 <body>
@@ -194,6 +195,7 @@
     <div class="modal-content">
       <span class="close-btn" onclick="cerrarAdmin()">&times;</span>
       <h3 style="margin-bottom: 15px;">Panel Administrador</h3>
+      
       <div id="loginSection">
         <div class="form-group">
           <label>PIN de Administrador</label>
@@ -203,8 +205,23 @@
       </div>
       
       <div id="adminPanelSection" style="display: none;">
-        <!-- REGISTRO DE PV -->
-        <div style="background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        
+        <!-- SECCIÓN 1: BUSCAR AFILIADO / CLIENTE -->
+        <div class="admin-section">
+          <h4 style="margin-bottom: 10px; color: #28a745;">🔍 Consultar Afiliado o Cliente</h4>
+          <div class="form-group">
+            <label>Cédula o Código (9 dígitos):</label>
+            <div style="display: flex; gap: 5px;">
+              <input type="text" id="adminSearchInput" placeholder="Ej: 1300000000 o 818000000">
+              <button class="btn" style="background: #28a745; padding: 10px 15px;" onclick="adminBuscarAfiliado()">Buscar</button>
+            </div>
+          </div>
+          <div id="adminSearchResult" style="font-size: 0.85rem; margin-top: 10px;"></div>
+          <button class="btn" style="width: 100%; background: #6c757d; margin-top: 10px; font-size: 0.8rem; padding: 6px;" onclick="adminVerTodos()">📋 Ver Lista Completa en Base de Datos</button>
+        </div>
+
+        <!-- SECCIÓN 2: REGISTRO DE PV -->
+        <div class="admin-section">
           <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV (Por Cédula)</h4>
           <div class="form-group">
             <label>Cédula del Cliente</label>
@@ -221,8 +238,8 @@
           <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar Puntos PV</button>
         </div>
 
-        <!-- REGISTRO DE DISTRIBUIDOR AFILIADO -->
-        <div style="background: var(--light); padding: 15px; border-radius: 8px;">
+        <!-- SECCIÓN 3: REGISTRO DE DISTRIBUIDOR AFILIADO -->
+        <div class="admin-section">
           <h4 style="margin-bottom: 10px; color: var(--secondary);">2. Registrar Distribuidor Afiliado</h4>
           <div class="form-group">
             <label>Código de Distribuidor (9 dígitos)</label>
@@ -234,8 +251,8 @@
           </div>
           <button class="btn" style="width: 100%; background: var(--secondary);" onclick="guardarDistribuidor()">Guardar Código de Distribuidor</button>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 
@@ -244,7 +261,7 @@
     // CONFIGURACIÓN JSONBIN & CREDENCIALES
     // =========================================================
     const JSONBIN_ID = "6ac68df3ffd5d1605356df4f";
-    const JSONBIN_KEY = "$2a$10$4srvcRSSt6sEm.MNKnGlieh9RO/8lbUt5nLc1gzS81Me5cLEPXmBy";
+    const JSONBIN_KEY = "$2a$10$4srvcRSSt6sEm.MNKnGlieh9R0/81bUt5nLc1gzS81Me5cLEPXmBy";
     const PIN_ADMIN = "23504381";
 
     // =========================================================
@@ -401,7 +418,6 @@
       const container = document.getElementById("cartItemsContainer");
       const tipo = document.getElementById("tipoPrecio").value;
       
-      // Aplicar precio de distribuidor solo si está validado
       const esDistribuidorValido = (tipo === "distribuidor" && distribuidorValidado);
       
       container.innerHTML = "";
@@ -520,7 +536,7 @@
     }
 
     // =========================================================
-    // ADMINISTRACIÓN
+    // ADMINISTRACIÓN & BÚSQUEDAS
     // =========================================================
     function abrirAdmin() {
       document.getElementById("modalAdmin").style.display = "flex";
@@ -536,6 +552,85 @@
       } else {
         alert("PIN Incorrecto.");
       }
+    }
+
+    async function adminBuscarAfiliado() {
+      const query = document.getElementById("adminSearchInput").value.trim();
+      const resBox = document.getElementById("adminSearchResult");
+
+      if (!query) {
+        resBox.innerHTML = "<span style='color:red;'>Ingresa una cédula o un código de 9 dígitos.</span>";
+        return;
+      }
+
+      resBox.innerHTML = "<span>Buscando en la nube...</span>";
+      const db = await obtenerNubeCompleta();
+      const clientes = db.clientes || {};
+      const distribuidores = db.distribuidores || {};
+
+      let html = "";
+      let encontrado = false;
+
+      // Buscar si es distribuidor
+      if (distribuidores[query]) {
+        encontrado = true;
+        html += `<div style="background:#e8f4ea; padding:8px; border-radius:5px; margin-bottom:5px;">
+          <strong>⭐ Distribuidor Afiliado Encontrado:</strong><br>
+          Código: ${query}<br>
+          Nombre: ${distribuidores[query]}
+        </div>`;
+      }
+
+      // Buscar si tiene registro de PV por cédula
+      if (clientes[query]) {
+        encontrado = true;
+        html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px;">
+          <strong>📊 Registro de PV Encontrado:</strong><br>
+          Cédula: ${query}<br>
+          Nombre: ${clientes[query].nombre}<br>
+          PV Acumulados: <strong>${clientes[query].pv} PV</strong>
+        </div>`;
+      }
+
+      if (!encontrado) {
+        html = `<span style="color:red;">No se encontraron registros para "${query}".</span>`;
+      }
+
+      resBox.innerHTML = html;
+    }
+
+    async function adminVerTodos() {
+      const resBox = document.getElementById("adminSearchResult");
+      resBox.innerHTML = "<span>Cargando lista completa...</span>";
+
+      const db = await obtenerNubeCompleta();
+      const clientes = db.clientes || {};
+      const distribuidores = db.distribuidores || {};
+
+      let html = "<div style='max-height: 180px; overflow-y: auto; text-align: left; background: white; padding: 10px; border: 1px solid var(--border); border-radius: 5px;'>";
+      
+      html += "<strong>⭐ DISTRIBUIDORES AFILIADOS:</strong><br>";
+      const listDist = Object.keys(distribuidores);
+      if (listDist.length === 0) {
+        html += "<small style='color:#888;'>No hay distribuidores registrados.</small><br>";
+      } else {
+        listDist.forEach(cod => {
+          html += `<small>• <strong>${cod}</strong> - ${distribuidores[cod]}</small><br>`;
+        });
+      }
+
+      html += "<br><strong>📊 REGISTROS DE PV (CÉDULA):</strong><br>";
+      const listCli = Object.keys(clientes);
+      if (listCli.length === 0) {
+        html += "<small style='color:#888;'>No hay clientes registrados con PV.</small><br>";
+      } else {
+        listCli.forEach(ced => {
+          html += `<small>• <strong>${ced}</strong> - ${clientes[ced].nombre} (${clientes[ced].pv} PV)</small><br>`;
+        });
+      }
+
+      html += "</div>";
+      resBox.innerHTML = html;
     }
 
     async function guardarCliente() {
