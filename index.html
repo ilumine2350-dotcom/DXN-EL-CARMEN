@@ -152,9 +152,9 @@
 
       <!-- SECCIÓN VALIDACIÓN DE DISTRIBUIDOR -->
       <div class="verify-box" id="secVerificacion" style="display: none;">
-        <label style="font-size: 0.85rem; font-weight: bold;">Código de Distribuidor (9 dígitos):</label>
+        <label style="font-size: 0.85rem; font-weight: bold;">Código de Distribuidor:</label>
         <div style="display: flex; gap: 5px; margin-top: 5px;">
-          <input type="text" id="codigoDistribuidor" maxlength="9" placeholder="Ej: 818000000" style="padding: 8px; font-size: 0.9rem; flex: 1; border: 1px solid var(--border); border-radius: 5px;">
+          <input type="text" id="codigoDistribuidor" placeholder="Ej: 818629644" style="padding: 8px; font-size: 0.9rem; flex: 1; border: 1px solid var(--border); border-radius: 5px;">
           <button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="validarCodigoDistribuidor()">Verificar</button>
         </div>
         <div id="msgVerificacion" style="font-size: 0.8rem; margin-top: 5px;"></div>
@@ -210,9 +210,9 @@
         <div class="admin-section">
           <h4 style="margin-bottom: 10px; color: #28a745;">🔍 Consultar Afiliado o Cliente</h4>
           <div class="form-group">
-            <label>Cédula o Código (9 dígitos):</label>
+            <label>Cédula o Código de Distribuidor:</label>
             <div style="display: flex; gap: 5px;">
-              <input type="text" id="adminSearchInput" placeholder="Ej: 1300000000 o 818000000">
+              <input type="text" id="adminSearchInput" placeholder="Ej: 2350071896 o 818629644">
               <button class="btn" style="background: #28a745; padding: 10px 15px;" onclick="adminBuscarAfiliado()">Buscar</button>
             </div>
           </div>
@@ -225,7 +225,7 @@
           <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV (Por Cédula)</h4>
           <div class="form-group">
             <label>Cédula del Cliente</label>
-            <input type="text" id="regCedula" placeholder="Ej: 1300000000">
+            <input type="text" id="regCedula" placeholder="Ej: 2350071896">
           </div>
           <div class="form-group">
             <label>Nombre Completo</label>
@@ -242,8 +242,8 @@
         <div class="admin-section">
           <h4 style="margin-bottom: 10px; color: var(--secondary);">2. Registrar Distribuidor Afiliado</h4>
           <div class="form-group">
-            <label>Código de Distribuidor (9 dígitos)</label>
-            <input type="text" id="regCodDistribuidor" maxlength="9" placeholder="Ej: 818123456">
+            <label>Código de Distribuidor</label>
+            <input type="text" id="regCodDistribuidor" placeholder="Ej: 818629644">
           </div>
           <div class="form-group">
             <label>Nombre del Distribuidor</label>
@@ -268,7 +268,6 @@
     // PRODUCTOS Y PRECIOS DXN ECUADOR
     // =========================================================
     const productos = [
-      // BEBIDAS Y CAFÉS
       { id: 1, nombre: "Dxn Lingzhi Coffee 3 En 1", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
       { id: 2, nombre: "Dxn Lingzhi Black Coffee", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
       { id: 3, nombre: "Dxn White Coffee Zhino", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
@@ -280,15 +279,11 @@
       { id: 9, nombre: "Dxn Spirulina Coffe", categoria: "bebidas", cliente: 37.00, distribuidor: 25.00 },
       { id: 10, nombre: "Dxn Ootea Lingzhi Black Coffe Mix", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
       { id: 11, nombre: "Dxn Lion Mane Coffee", categoria: "bebidas", cliente: 36.70, distribuidor: 24.70 },
-
-      // SUPLEMENTOS
       { id: 12, nombre: "Dxn Spirulina Tablet 120s", categoria: "suplementos", cliente: 38.40, distribuidor: 26.40 },
       { id: 13, nombre: "Dxn Spirulina Capsula 30s", categoria: "suplementos", cliente: 19.20, distribuidor: 7.20 },
       { id: 14, nombre: "Dxn Morinzyme", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
       { id: 15, nombre: "Dxn Morinzhi", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
       { id: 16, nombre: "Dxn Roselle", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
-
-      // CUIDADO PERSONAL
       { id: 17, nombre: "Dxn Ganozhi Pasta Dental", categoria: "cuidado", cliente: 18.80, distribuidor: 13.80 },
       { id: 18, nombre: "Dxn Ganozhi Shampoo", categoria: "cuidado", cliente: 31.00, distribuidor: 26.00 },
       { id: 19, nombre: "Dxn Ganozhi Gel De Baño", categoria: "cuidado", cliente: 38.00, distribuidor: 26.00 },
@@ -313,14 +308,8 @@
             <div class="product-info">
               <div class="product-title">${p.nombre}</div>
               <div class="prices">
-                <div class="price-tag">
-                  Cliente
-                  <span>$${p.cliente.toFixed(2)}</span>
-                </div>
-                <div class="price-tag">
-                  Distribuidor
-                  <span>$${p.distribuidor.toFixed(2)}</span>
-                </div>
+                <div class="price-tag">Cliente <span>$${p.cliente.toFixed(2)}</span></div>
+                <div class="price-tag">Distribuidor <span>$${p.distribuidor.toFixed(2)}</span></div>
               </div>
             </div>
             <div style="padding: 0 15px 15px;">
@@ -341,19 +330,14 @@
       }
     }
 
-    // =========================================================
-    // LÓGICA DEL CARRITO DE COMPRAS
-    // =========================================================
     function agregarAlCarrito(id) {
       const prod = productos.find(p => p.id === id);
       const existe = carrito.find(item => item.id === id);
-
       if (existe) {
         existe.cantidad++;
       } else {
         carrito.push({ ...prod, cantidad: 1 });
       }
-
       actualizarContadorCarrito();
     }
 
@@ -383,7 +367,6 @@
       } else {
         secVerif.style.display = "none";
       }
-
       actualizarCarritoView();
     }
 
@@ -391,8 +374,8 @@
       const cod = document.getElementById("codigoDistribuidor").value.trim();
       const msgBox = document.getElementById("msgVerificacion");
 
-      if (cod.length !== 9 || isNaN(cod)) {
-        msgBox.innerHTML = "<span style='color: red;'>El código debe ser de exactamente 9 dígitos.</span>";
+      if (!cod) {
+        msgBox.innerHTML = "<span style='color: red;'>Ingresa un código válido.</span>";
         return;
       }
 
@@ -417,7 +400,6 @@
     function actualizarCarritoView() {
       const container = document.getElementById("cartItemsContainer");
       const tipo = document.getElementById("tipoPrecio").value;
-      
       const esDistribuidorValido = (tipo === "distribuidor" && distribuidorValidado);
       
       container.innerHTML = "";
@@ -429,7 +411,6 @@
       }
 
       let total = 0;
-
       carrito.forEach((item, index) => {
         const precioUnitario = esDistribuidorValido ? item.distribuidor : item.cliente;
         const subtotal = precioUnitario * item.cantidad;
@@ -467,7 +448,7 @@
       const tipo = document.getElementById("tipoPrecio").value;
 
       if (tipo === "distribuidor" && !distribuidorValidado) {
-        alert("Debes ingresar un código de 9 dígitos válido para comprar con precio de distribuidor.");
+        alert("Debes ingresar un código válido para comprar con precio de distribuidor.");
         return;
       }
 
@@ -497,7 +478,12 @@
           headers: { 'X-Master-Key': JSONBIN_KEY }
         });
         const data = await res.json();
-        return data.record || { clientes: {}, distribuidores: {} };
+        let record = data.record || {};
+        
+        if (!record.clientes) record.clientes = {};
+        if (!record.distribuidores) record.distribuidores = {};
+
+        return record;
       } catch (err) {
         console.error("Error al obtener datos:", err);
         return { clientes: {}, distribuidores: {} };
@@ -510,7 +496,7 @@
       const resBox = document.getElementById("resultadoPV");
 
       if (!cedula) {
-        alert("Por favor ingresa un número de cédula.");
+        alert("Por favor ingresa un número de cédula o código.");
         return;
       }
       if (!check) {
@@ -531,7 +517,7 @@
           <p style="font-size: 1.1rem; margin-top: 5px;">Tienes un total acumulado de: <strong>${c.pv} PV</strong></p>
         `;
       } else {
-        resBox.innerHTML = `<p style="color: #c00;">No se encontró información registrada para la cédula ${cedula}.</p>`;
+        resBox.innerHTML = `<p style="color: #c00;">No se encontró información registrada para la cédula/código ${cedula}.</p>`;
       }
     }
 
@@ -559,7 +545,7 @@
       const resBox = document.getElementById("adminSearchResult");
 
       if (!query) {
-        resBox.innerHTML = "<span style='color:red;'>Ingresa una cédula o un código de 9 dígitos.</span>";
+        resBox.innerHTML = "<span style='color:red;'>Ingresa una cédula o código para buscar.</span>";
         return;
       }
 
@@ -571,7 +557,6 @@
       let html = "";
       let encontrado = false;
 
-      // Buscar si es distribuidor
       if (distribuidores[query]) {
         encontrado = true;
         html += `<div style="background:#e8f4ea; padding:8px; border-radius:5px; margin-bottom:5px;">
@@ -581,7 +566,6 @@
         </div>`;
       }
 
-      // Buscar si tiene registro de PV por cédula
       if (clientes[query]) {
         encontrado = true;
         html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px;">
@@ -593,7 +577,7 @@
       }
 
       if (!encontrado) {
-        html = `<span style="color:red;">No se encontraron registros para "${query}".</span>`;
+        html = `<span style="color:red;">No se encontraron registros para "${query}". Agrégalo abajo en el formulario de registro.</span>`;
       }
 
       resBox.innerHTML = html;
@@ -639,13 +623,11 @@
       const pv = parseFloat(document.getElementById("regPV").value);
 
       if (!cedula || !nombre || isNaN(pv)) {
-        alert("Completa todos los campos de cliente.");
+        alert("Completa todos los campos del cliente.");
         return;
       }
 
       const db = await obtenerNubeCompleta();
-      if (!db.clientes) db.clientes = {};
-
       db.clientes[cedula] = { nombre: nombre, pv: pv };
 
       try {
@@ -670,14 +652,12 @@
       const cod = document.getElementById("regCodDistribuidor").value.trim();
       const nombre = document.getElementById("regNombreDistribuidor").value.trim();
 
-      if (cod.length !== 9 || isNaN(cod) || !nombre) {
-        alert("El código debe ser numérico de 9 dígitos y debes ingresar el nombre.");
+      if (!cod || !nombre) {
+        alert("Debes ingresar un código y el nombre del distribuidor.");
         return;
       }
 
       const db = await obtenerNubeCompleta();
-      if (!db.distribuidores) db.distribuidores = {};
-
       db.distribuidores[cod] = nombre;
 
       try {
