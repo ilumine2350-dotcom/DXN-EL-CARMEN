@@ -222,20 +222,28 @@
         </div>
 
         <div class="admin-section">
-          <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV</h4>
+          <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar o Actualizar Puntos PV</h4>
           <div class="form-group">
-            <label>Cédula o Código</label>
-            <input type="text" id="regCedula">
+            <label>Cédula o Código de Afiliado</label>
+            <input type="text" id="regCedula" placeholder="Ej: 1301234567" onblur="autocompletarCliente()">
           </div>
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="regNombre">
+            <input type="text" id="regNombre" placeholder="Ej: Juan Pérez">
+          </div>
+          <div class="form-group">
+            <label>Modo de Actualización de PV</label>
+            <select id="modoPV">
+              <option value="sumar">➕ Sumar a los PV actuales</option>
+              <option value="reemplazar">📝 Reemplazar valor total de PV</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Puntos de Volumen (PV)</label>
-            <input type="number" step="0.01" id="regPV">
+            <input type="number" step="0.01" id="regPV" placeholder="Ej: 15.50">
           </div>
-          <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar PV</button>
+          <div id="infoClienteExistente" style="font-size: 0.8rem; color: #666; margin-bottom: 10px;"></div>
+          <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar / Actualizar PV</button>
         </div>
 
         <div class="admin-section">
@@ -592,6 +600,48 @@
       }
     }
 
+    async function autocompletarCliente() {
+      const cedula = document.getElementById("regCedula").value.trim();
+      const infoBox = document.getElementById("infoClienteExistente");
+      if (!cedula) return;
+
+      const db = await obtenerBaseDatos();
+      if (db.clientes && db.clientes[cedula]) {
+        const cliente = db.clientes[cedula];
+        document.getElementById("regNombre").value = cliente.nombre;
+        infoBox.innerHTML = `ℹ️ Cliente encontrado: <strong>${cliente.nombre}</strong> (PV actuales: <strong>${cliente.pv} PV</strong>)`;
+      } else {
+        infoBox.innerHTML = "✨ Nuevo registro de cliente/afiliado.";
+      }
+    }
+
+    async function guardarCliente() {
+      const cedula = document.getElementById("regCedula").value.trim();
+      const nombre = document.getElementById("regNombre").value.trim();
+      const modo = document.getElementById("modoPV").value;
+      const pvInput = parseFloat(document.getElementById("regPV").value);
+
+      if (!cedula || !nombre || isNaN(pvInput)) return alert("Completa todos los campos correctamente.");
+
+      const db = await obtenerBaseDatos();
+      if (!db.clientes) db.clientes = {};
+
+      let pvFinal = pvInput;
+      if (modo === "sumar" && db.clientes[cedula] && typeof db.clientes[cedula].pv === "number") {
+        pvFinal = db.clientes[cedula].pv + pvInput;
+      }
+
+      db.clientes[cedula] = { nombre: nombre, pv: parseFloat(pvFinal.toFixed(2)) };
+      
+      const ok = await guardarEnNubeYLocal(db);
+      alert(ok ? `¡PV actualizados con éxito! Total actual: ${pvFinal.toFixed(2)} PV` : `¡Guardado localmente! Total: ${pvFinal.toFixed(2)} PV`);
+      
+      document.getElementById("regCedula").value = "";
+      document.getElementById("regNombre").value = "";
+      document.getElementById("regPV").value = "";
+      document.getElementById("infoClienteExistente").innerHTML = "";
+    }
+
     async function adminBuscarAfiliado() {
       const query = document.getElementById("adminSearchInput").value.trim().toLowerCase();
       const resBox = document.getElementById("adminSearchResult");
@@ -618,7 +668,7 @@
         if (ced.toLowerCase().includes(query) || (clientes[ced].nombre && clientes[ced].nombre.toLowerCase().includes(query))) {
           encontrado = true;
           html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px; margin-bottom:5px;">
-            <strong>📊 Puntos PV:</strong> ${ced} - ${clientes[ced].nombre} (${clientes[ced].pv} PV)
+            <strong>📊 Puntos PV:</strong> ${ced} - ${clientes[ced].nombre} (<strong>${clientes[ced].pv} PV</strong>)
           </div>`;
         }
       });
@@ -638,26 +688,10 @@
       });
       html += "<br><strong>📊 PUNTOS PV:</strong><br>";
       Object.keys(db.clientes || {}).forEach(ced => {
-        html += `<small>• <strong>${ced}</strong> - ${db.clientes[ced].nombre} (${db.clientes[ced].pv} PV)</small><br>`;
+        html += `<small>• <strong>${ced}</strong> - ${db.clientes[ced].nombre} (<strong>${db.clientes[ced].pv} PV</strong>)</small><br>`;
       });
       html += "</div>";
       resBox.innerHTML = html;
-    }
-
-    async function guardarCliente() {
-      const cedula = document.getElementById("regCedula").value.trim();
-      const nombre = document.getElementById("regNombre").value.trim();
-      const pv = parseFloat(document.getElementById("regPV").value);
-
-      if (!cedula || !nombre || isNaN(pv)) return alert("Completa los campos.");
-
-      const db = await obtenerBaseDatos();
-      db.clientes[cedula] = { nombre: nombre, pv: pv };
-      await guardarEnNubeYLocal(db);
-      alert("¡Registro guardado!");
-      document.getElementById("regCedula").value = "";
-      document.getElementById("regNombre").value = "";
-      document.getElementById("regPV").value = "";
     }
 
     async function guardarDistribuidor() {
