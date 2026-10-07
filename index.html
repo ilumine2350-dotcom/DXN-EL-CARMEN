@@ -107,7 +107,7 @@
     <div class="card">
       <h3 class="card-title">Consultar Mis Puntos de Volumen (PV)</h3>
       <div class="search-box">
-        <input type="text" id="inputCedula" placeholder="Ingresa tu número de cédula o código...">
+        <input type="text" id="inputCedula" placeholder="Ingresa tu número de cédula, código o nombre...">
         <button class="btn" onclick="buscarPV()">Consultar mis PV</button>
       </div>
       <div class="checkbox-container">
@@ -154,7 +154,7 @@
       <div class="verify-box" id="secVerificacion" style="display: none;">
         <label style="font-size: 0.85rem; font-weight: bold;">Código de Distribuidor:</label>
         <div style="display: flex; gap: 5px; margin-top: 5px;">
-          <input type="text" id="codigoDistribuidor" placeholder="Ej: 818629644" style="padding: 8px; font-size: 0.9rem; flex: 1; border: 1px solid var(--border); border-radius: 5px;">
+          <input type="text" id="codigoDistribuidor" placeholder="Ej: 818604055" style="padding: 8px; font-size: 0.9rem; flex: 1; border: 1px solid var(--border); border-radius: 5px;">
           <button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="validarCodigoDistribuidor()">Verificar</button>
         </div>
         <div id="msgVerificacion" style="font-size: 0.8rem; margin-top: 5px;"></div>
@@ -210,9 +210,9 @@
         <div class="admin-section">
           <h4 style="margin-bottom: 10px; color: #28a745;">🔍 Consultar Afiliado o Cliente</h4>
           <div class="form-group">
-            <label>Cédula o Código de Distribuidor:</label>
+            <label>Cédula, Código de Distribuidor o Nombre:</label>
             <div style="display: flex; gap: 5px;">
-              <input type="text" id="adminSearchInput" placeholder="Ej: 2350071896 o 818629644">
+              <input type="text" id="adminSearchInput" placeholder="Ej: 818604055, 1307564128 o Yelena">
               <button class="btn" style="background: #28a745; padding: 10px 15px;" onclick="adminBuscarAfiliado()">Buscar</button>
             </div>
           </div>
@@ -222,18 +222,18 @@
 
         <!-- SECCIÓN 2: REGISTRO DE PV -->
         <div class="admin-section">
-          <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV (Por Cédula)</h4>
+          <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV (Por Cédula o Código)</h4>
           <div class="form-group">
-            <label>Cédula del Cliente</label>
-            <input type="text" id="regCedula" placeholder="Ej: 2350071896">
+            <label>Cédula o Código del Cliente</label>
+            <input type="text" id="regCedula" placeholder="Ej: 818604055 o 1307564128">
           </div>
           <div class="form-group">
             <label>Nombre Completo</label>
-            <input type="text" id="regNombre" placeholder="Ej: Juan Pérez">
+            <input type="text" id="regNombre" placeholder="Ej: Yelena vega Vélez">
           </div>
           <div class="form-group">
             <label>Puntos de Volumen (PV)</label>
-            <input type="number" id="regPV" placeholder="Ej: 150.5">
+            <input type="number" step="0.01" id="regPV" placeholder="Ej: 9.20">
           </div>
           <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar Puntos PV</button>
         </div>
@@ -243,11 +243,11 @@
           <h4 style="margin-bottom: 10px; color: var(--secondary);">2. Registrar Distribuidor Afiliado</h4>
           <div class="form-group">
             <label>Código de Distribuidor</label>
-            <input type="text" id="regCodDistribuidor" placeholder="Ej: 818629644">
+            <input type="text" id="regCodDistribuidor" placeholder="Ej: 818604055">
           </div>
           <div class="form-group">
             <label>Nombre del Distribuidor</label>
-            <input type="text" id="regNombreDistribuidor" placeholder="Ej: Maria López">
+            <input type="text" id="regNombreDistribuidor" placeholder="Ej: Yelena vega Vélez">
           </div>
           <button class="btn" style="width: 100%; background: var(--secondary);" onclick="guardarDistribuidor()">Guardar Código de Distribuidor</button>
         </div>
@@ -371,7 +371,7 @@
     }
 
     async function validarCodigoDistribuidor() {
-      const cod = document.getElementById("codigoDistribuidor").value.trim();
+      const cod = document.getElementById("codigoDistribuidor").value.trim().toLowerCase();
       const msgBox = document.getElementById("msgVerificacion");
 
       if (!cod) {
@@ -384,9 +384,11 @@
       const db = await obtenerNubeCompleta();
       const distribuidores = db.distribuidores || {};
 
-      if (distribuidores[cod]) {
+      let coincidencia = Object.keys(distribuidores).find(k => k.toLowerCase() === cod);
+
+      if (coincidencia) {
         distribuidorValidado = true;
-        nombreDistribuidorActivo = distribuidores[cod];
+        nombreDistribuidorActivo = distribuidores[coincidencia];
         msgBox.innerHTML = `<span style="color: green; font-weight: bold;">✔ Código Válido: ${nombreDistribuidorActivo}</span>`;
         actualizarCarritoView();
       } else {
@@ -491,12 +493,12 @@
     }
 
     async function buscarPV() {
-      const cedula = document.getElementById("inputCedula").value.trim();
+      const query = document.getElementById("inputCedula").value.trim().toLowerCase();
       const check = document.getElementById("checkConfirm").checked;
       const resBox = document.getElementById("resultadoPV");
 
-      if (!cedula) {
-        alert("Por favor ingresa un número de cédula o código.");
+      if (!query) {
+        alert("Por favor ingresa un número de cédula, código o nombre.");
         return;
       }
       if (!check) {
@@ -510,14 +512,25 @@
       const db = await obtenerNubeCompleta();
       const clientes = db.clientes || {};
 
-      if (clientes[cedula]) {
-        const c = clientes[cedula];
-        resBox.innerHTML = `
-          <h4 style="color: var(--primary);">¡Hola, ${c.nombre}!</h4>
-          <p style="font-size: 1.1rem; margin-top: 5px;">Tienes un total acumulado de: <strong>${c.pv} PV</strong></p>
-        `;
+      let html = "";
+      let encontrado = false;
+
+      Object.keys(clientes).forEach(ced => {
+        const c = clientes[ced];
+        const nom = c.nombre ? c.nombre.toLowerCase() : "";
+        if (ced.toLowerCase() === query || nom.includes(query)) {
+          encontrado = true;
+          html += `
+            <h4 style="color: var(--primary);">¡Hola, ${c.nombre}!</h4>
+            <p style="font-size: 1.1rem; margin-top: 5px;">Tienes un total acumulado de: <strong>${c.pv} PV</strong></p>
+          `;
+        }
+      });
+
+      if (!encontrado) {
+        resBox.innerHTML = `<p style="color: #c00;">No se encontró información de PV registrada para "${query}".</p>`;
       } else {
-        resBox.innerHTML = `<p style="color: #c00;">No se encontró información registrada para la cédula/código ${cedula}.</p>`;
+        resBox.innerHTML = html;
       }
     }
 
@@ -541,11 +554,11 @@
     }
 
     async function adminBuscarAfiliado() {
-      const query = document.getElementById("adminSearchInput").value.trim();
+      const query = document.getElementById("adminSearchInput").value.trim().toLowerCase();
       const resBox = document.getElementById("adminSearchResult");
 
       if (!query) {
-        resBox.innerHTML = "<span style='color:red;'>Ingresa una cédula o código para buscar.</span>";
+        resBox.innerHTML = "<span style='color:red;'>Ingresa cédula, código o nombre.</span>";
         return;
       }
 
@@ -557,27 +570,36 @@
       let html = "";
       let encontrado = false;
 
-      if (distribuidores[query]) {
-        encontrado = true;
-        html += `<div style="background:#e8f4ea; padding:8px; border-radius:5px; margin-bottom:5px;">
-          <strong>⭐ Distribuidor Afiliado Encontrado:</strong><br>
-          Código: ${query}<br>
-          Nombre: ${distribuidores[query]}
-        </div>`;
-      }
+      // Buscar en Distribuidores
+      Object.keys(distribuidores).forEach(cod => {
+        const nombre = distribuidores[cod].toLowerCase();
+        if (cod.toLowerCase() === query || nombre.includes(query)) {
+          encontrado = true;
+          html += `<div style="background:#e8f4ea; padding:8px; border-radius:5px; margin-bottom:5px;">
+            <strong>⭐ Distribuidor Afiliado Encontrado:</strong><br>
+            Código: ${cod}<br>
+            Nombre: ${distribuidores[cod]}
+          </div>`;
+        }
+      });
 
-      if (clientes[query]) {
-        encontrado = true;
-        html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px;">
-          <strong>📊 Registro de PV Encontrado:</strong><br>
-          Cédula: ${query}<br>
-          Nombre: ${clientes[query].nombre}<br>
-          PV Acumulados: <strong>${clientes[query].pv} PV</strong>
-        </div>`;
-      }
+      // Buscar en Clientes (PV)
+      Object.keys(clientes).forEach(ced => {
+        const c = clientes[ced];
+        const nombre = c.nombre ? c.nombre.toLowerCase() : "";
+        if (ced.toLowerCase() === query || nombre.includes(query)) {
+          encontrado = true;
+          html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px; margin-bottom:5px;">
+            <strong>📊 Registro de PV Encontrado:</strong><br>
+            Cédula/ID: ${ced}<br>
+            Nombre: ${c.nombre}<br>
+            PV Acumulados: <strong>${c.pv} PV</strong>
+          </div>`;
+        }
+      });
 
       if (!encontrado) {
-        html = `<span style="color:red;">No se encontraron registros para "${query}". Agrégalo abajo en el formulario de registro.</span>`;
+        html = `<span style="color:red;">No se encontraron registros para "${query}".</span>`;
       }
 
       resBox.innerHTML = html;
@@ -603,7 +625,7 @@
         });
       }
 
-      html += "<br><strong>📊 REGISTROS DE PV (CÉDULA):</strong><br>";
+      html += "<br><strong>📊 REGISTROS DE PV:</strong><br>";
       const listCli = Object.keys(clientes);
       if (listCli.length === 0) {
         html += "<small style='color:#888;'>No hay clientes registrados con PV.</small><br>";
