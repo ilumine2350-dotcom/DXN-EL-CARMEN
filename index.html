@@ -16,7 +16,7 @@
       --border: #e1e4e8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
+    body { background-color: var(--light); color: var(--dark); line-height: 1.6; padding-bottom: 80px; }
     header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
     .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem; }
     .logo-container { display: flex; align-items: center; gap: 10px; }
@@ -37,6 +37,8 @@
     .search-box input { flex: 1; padding: 12px 15px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 0.95rem; }
     .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
     .btn:hover { background: var(--primary-dark); }
+    .btn-add { background: var(--secondary); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; transition: 0.3s; }
+    .btn-add:hover { background: #006699; }
     .checkbox-container { text-align: center; font-size: 0.8rem; color: var(--gray); margin-bottom: 15px; }
     .result-box { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; display: none; }
     .catalog-title { text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
@@ -45,23 +47,31 @@
     .cat-btn { background: var(--white); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: 0.3s; }
     .cat-btn.active, .cat-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
     .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-    .product-card { background: white; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+    .product-card { background: white; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
     .product-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .product-info { padding: 15px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-info { padding: 15px; }
     .product-title { font-weight: bold; font-size: 1rem; margin-bottom: 8px; color: var(--dark); }
     .prices { display: flex; justify-content: space-between; background: var(--light); padding: 10px; border-radius: 6px; margin-top: 10px; }
     .price-tag { font-size: 0.8rem; }
     .price-tag span { display: block; font-weight: bold; font-size: 0.95rem; color: var(--primary); }
+
+    /* FLOTANTE DEL CARRITO */
+    .cart-floating-btn { position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; padding: 15px 20px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; z-index: 150; }
+    .cart-badge { background: white; color: var(--primary); border-radius: 50%; padding: 2px 8px; font-size: 0.85rem; }
+
     footer { background: var(--dark); color: white; padding: 40px 1rem 20px; font-size: 0.85rem; margin-top: 50px; }
     .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; padding-bottom: 30px; border-bottom: 1px solid #333; }
     .footer-bottom { max-width: 1200px; margin: 20px auto 0; display: flex; justify-content: space-between; align-items: center; color: #888; }
     .admin-link { color: #888; text-decoration: none; cursor: pointer; }
+    
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
-    .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; position: relative; }
+    .modal-content { background: white; padding: 25px; border-radius: 10px; width: 90%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; }
     .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 500; }
-    .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .cart-item-btn { background: #ff4d4d; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -118,6 +128,37 @@
     </div>
   </div>
 
+  <!-- BOTÓN FLOTANTE DEL CARRITO -->
+  <div class="cart-floating-btn" onclick="abrirCarrito()">
+    🛒 Carrito <span class="cart-badge" id="cartCount">0</span>
+  </div>
+
+  <!-- MODAL DEL CARRITO DE COMPRAS -->
+  <div class="modal" id="modalCarrito">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarCarrito()">&times;</span>
+      <h3 style="margin-bottom: 15px;">Tu Carrito de Compras</h3>
+      
+      <div class="form-group">
+        <label>Tipo de Comprador:</label>
+        <select id="tipoPrecio" onchange="actualizarCarritoView()">
+          <option value="cliente">Cliente Final (Público)</option>
+          <option value="distribuidor">Distribuidor Afiliado</option>
+        </select>
+      </div>
+
+      <div id="cartItemsContainer" style="margin-bottom: 15px;"></div>
+
+      <div style="font-size: 1.1rem; font-weight: bold; text-align: right; margin-bottom: 15px;">
+        Total: $<span id="cartTotal">0.00</span>
+      </div>
+
+      <button class="btn" style="width: 100%; background: #25d366;" onclick="enviarPedidoWhatsApp()">
+        📲 Pedir por WhatsApp
+      </button>
+    </div>
+  </div>
+
   <footer id="ubicacion">
     <div class="footer-grid">
       <div>
@@ -136,6 +177,7 @@
     </div>
   </footer>
 
+  <!-- MODAL DE ADMINISTRADOR -->
   <div class="modal" id="modalAdmin">
     <div class="modal-content">
       <span class="close-btn" onclick="cerrarAdmin()">&times;</span>
@@ -206,7 +248,8 @@
       { id: 21, nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", cliente: 11.90, distribuidor: 6.90 }
     ];
 
-    // Cargar productos al iniciar
+    let carrito = [];
+
     document.addEventListener("DOMContentLoaded", () => {
       renderProductos(productos);
     });
@@ -230,6 +273,9 @@
                 </div>
               </div>
             </div>
+            <div style="padding: 0 15px 15px;">
+              <button class="btn-add" onclick="agregarAlCarrito(${p.id})">🛒 Agregar al Carrito</button>
+            </div>
           </div>
         `;
       });
@@ -243,6 +289,101 @@
       } else {
         renderProductos(productos.filter(p => p.categoria === cat));
       }
+    }
+
+    // =========================================================
+    // LÓGICA DEL CARRITO DE COMPRAS
+    // =========================================================
+    function agregarAlCarrito(id) {
+      const prod = productos.find(p => p.id === id);
+      const existe = carrito.find(item => item.id === id);
+
+      if (existe) {
+        existe.cantidad++;
+      } else {
+        carrito.push({ ...prod, cantidad: 1 });
+      }
+
+      actualizarContadorCarrito();
+    }
+
+    function actualizarContadorCarrito() {
+      const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+      document.getElementById("cartCount").innerText = totalItems;
+    }
+
+    function abrirCarrito() {
+      document.getElementById("modalCarrito").style.display = "flex";
+      actualizarCarritoView();
+    }
+
+    function cerrarCarrito() {
+      document.getElementById("modalCarrito").style.display = "none";
+    }
+
+    function actualizarCarritoView() {
+      const container = document.getElementById("cartItemsContainer");
+      const tipo = document.getElementById("tipoPrecio").value;
+      container.innerHTML = "";
+
+      if (carrito.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#888;'>El carrito está vacío.</p>";
+        document.getElementById("cartTotal").innerText = "0.00";
+        return;
+      }
+
+      let total = 0;
+
+      carrito.forEach((item, index) => {
+        const precioUnitario = tipo === "cliente" ? item.cliente : item.distribuidor;
+        const subtotal = precioUnitario * item.cantidad;
+        total += subtotal;
+
+        container.innerHTML += `
+          <div class="cart-item">
+            <div>
+              <strong>${item.nombre}</strong><br>
+              <small>Cant: ${item.cantidad} x $${precioUnitario.toFixed(2)}</small>
+            </div>
+            <div>
+              <span style="font-weight:bold; margin-right:10px;">$${subtotal.toFixed(2)}</span>
+              <button class="cart-item-btn" onclick="eliminarDelCarrito(${index})">✕</button>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById("cartTotal").innerText = total.toFixed(2);
+    }
+
+    function eliminarDelCarrito(index) {
+      carrito.splice(index, 1);
+      actualizarContadorCarrito();
+      actualizarCarritoView();
+    }
+
+    function enviarPedidoWhatsApp() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío. Agrega productos antes de realizar el pedido.");
+        return;
+      }
+
+      const tipo = document.getElementById("tipoPrecio").value;
+      const tipoTexto = tipo === "cliente" ? "Cliente Final" : "Distribuidor Afiliado";
+      let mensaje = `Hola DXN Salud & Vida, deseo realizar el siguiente pedido como *${tipoTexto}*:\n\n`;
+
+      let total = 0;
+      carrito.forEach(item => {
+        const precioUnitario = tipo === "cliente" ? item.cliente : item.distribuidor;
+        const subtotal = precioUnitario * item.cantidad;
+        total += subtotal;
+        mensaje += `• *${item.cantidad}x* ${item.nombre} ($${subtotal.toFixed(2)})\n`;
+      });
+
+      mensaje += `\n*Total a pagar:* $${total.toFixed(2)}\n\n¿Me indican los datos para concretar el pago y envío?`;
+
+      const urlWhatsApp = `https://wa.me/593990689086?text=${encodeURIComponent(mensaje)}`;
+      window.open(urlWhatsApp, '_blank');
     }
 
     // =========================================================
