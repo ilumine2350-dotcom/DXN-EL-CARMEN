@@ -1,1051 +1,346 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DXN Salud & Vida - Distribuidor Autorizado</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #d32f2f;
-            --primary-hover: #b71c1c;
-            --secondary: #10b981;
-            --secondary-hover: #059669;
-            --dark: #0f172a;
-            --card-bg: #ffffff;
-            --bg: #f8fafc;
-            --text-main: #334155;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        /* --- Header --- */
-        header {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0.8rem 1.5rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            background: linear-gradient(135deg, var(--primary), #e53e3e);
-            color: white;
-            font-weight: 800;
-            font-size: 1.2rem;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
-        }
-
-        .logo-text h1 {
-            color: var(--dark);
-            font-size: 1.25rem;
-            font-weight: 700;
-            line-height: 1.1;
-        }
-
-        .logo-text span {
-            color: var(--secondary);
-            font-size: 0.78rem;
-            font-weight: 600;
-            display: block;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            font-size: 0.92rem;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--primary);
-        }
-
-        .btn-whatsapp-header {
-            background-color: var(--secondary);
-            color: white !important;
-            padding: 0.55rem 1.2rem;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-            transition: all 0.3s ease;
-        }
-
-        .btn-whatsapp-header:hover {
-            background-color: var(--secondary-hover);
-            transform: translateY(-2px);
-        }
-
-        /* --- Hero --- */
-        .hero {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(211, 47, 47, 0.88)), url('https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=80') center/cover;
-            color: white;
-            text-align: center;
-            padding: 4.5rem 1.5rem 5rem;
-            border-radius: 0 0 30px 30px;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: #e2e8f0;
-            font-weight: 300;
-        }
-
-        /* --- Layout --- */
-        .container {
-            max-width: 1240px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            color: var(--dark);
-            font-weight: 700;
-        }
-
-        .section-subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 0.3rem;
-        }
-
-        /* --- Consulta de PV --- */
-        .pv-card {
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: var(--radius-lg);
-            max-width: 680px;
-            margin: -3.5rem auto 3rem;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            z-index: 10;
-            border: 1px solid var(--border-color);
-        }
-
-        .pv-form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1.2rem;
-        }
-
-        .pv-input-wrapper {
-            display: flex;
-            gap: 0.8rem;
-        }
-
-        .input-control {
-            flex: 1;
-            padding: 0.85rem 1.2rem;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-control:focus {
-            border-color: var(--primary);
-        }
-
-        .btn-main {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.85rem 1.8rem;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .btn-main:hover {
-            background: var(--primary-hover);
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        /* Resultados PV */
-        .pv-result-box {
-            display: none;
-            margin-top: 1.8rem;
-            padding: 1.8rem;
-            background: #ffffff;
-            border-radius: var(--radius-md);
-            border: 1px solid #cbd5e1;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        .pv-client-header {
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 1rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .pv-client-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .pv-client-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 0.2rem;
-        }
-
-        .pv-big-score {
-            text-align: center;
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-        }
-
-        .pv-big-score .number {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-        }
-
-        .pv-big-score .label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 0.4rem;
-        }
-
-        /* Barras de Metas */
-        .goal-item {
-            margin-bottom: 1rem;
-        }
-
-        .goal-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            margin-bottom: 0.3rem;
-            font-weight: 600;
-        }
-
-        .progress-bar-bg {
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--secondary);
-            width: 0%;
-            transition: width 0.6s ease;
-        }
-
-        .pv-error-box {
-            display: none;
-            margin-top: 1.5rem;
-            padding: 1.2rem;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        /* --- Catálogo de Productos --- */
-        .filter-container {
-            display: flex;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: #ffffff;
-            border: 2px solid var(--border-color);
-            padding: 0.5rem 1.2rem;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.8rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: #f1f5f9;
-        }
-
-        .product-body {
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .product-category {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--secondary);
-            margin-bottom: 0.3rem;
-        }
-
-        .product-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .product-pv {
-            display: inline-block;
-            background: #fef2f2;
-            color: var(--primary);
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            margin-bottom: 0.8rem;
-            width: fit-content;
-        }
-
-        .product-prices {
-            margin-top: auto;
-            padding-top: 0.8rem;
-            border-top: 1px dashed var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .price-public {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--dark);
-        }
-
-        .price-socio {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .btn-buy-wa {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: var(--secondary);
-            color: white;
-            text-decoration: none;
-            padding: 0.65rem;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.88rem;
-            margin-top: 0.8rem;
-            transition: background 0.3s;
-        }
-
-        .btn-buy-wa:hover {
-            background: var(--secondary-hover);
-        }
-
-        /* --- Panel Administrador --- */
-        .admin-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .admin-card {
-            background: white;
-            width: 100%;
-            max-width: 700px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .close-admin {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .admin-form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-        }
-
-        .admin-table th, .admin-table td {
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        .admin-table th {
-            background: #f8fafc;
-            color: var(--dark);
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-        }
-
-        /* --- Footer & Flotante --- */
-        footer {
-            background: var(--dark);
-            color: #94a3b8;
-            padding: 3.5rem 0 1.5rem;
-            margin-top: 5rem;
-        }
-
-        .footer-grid {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .footer-col h3 {
-            color: white;
-            font-size: 1.1rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2.5rem;
-            border-top: 1px solid #1e293b;
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            max-width: 1240px;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
-
-        .admin-link {
-            color: #64748b;
-            text-decoration: none;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            width: 58px;
-            height: 58px;
-            bottom: 25px;
-            right: 25px;
-            background-color: #25d366;
-            color: white;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 28px;
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DXN Salud & Vida - Distribuidor Autorizado</title>
+  <style>
+    :root {
+      --primary: #cc0000;
+      --primary-dark: #990000;
+      --secondary: #0088cc;
+      --dark: #1a1a1a;
+      --light: #f4f6f9;
+      --white: #ffffff;
+      --gray: #666666;
+      --border: #e1e4e8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
+    header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem; }
+    .logo-container { display: flex; align-items: center; gap: 10px; }
+    .logo-badge { background: var(--primary); color: white; font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 1.2rem; }
+    .logo-text h1 { font-size: 1.1rem; color: var(--dark); }
+    .logo-text p { font-size: 0.75rem; color: var(--gray); }
+    .nav-links { display: flex; gap: 20px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; font-size: 0.9rem; transition: 0.3s; }
+    .nav-links a:hover { color: var(--primary); }
+    .btn-ws { background: #25d366; color: white; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+    .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; text-align: center; padding: 4rem 1rem; }
+    .hero h2 { font-size: 2rem; margin-bottom: 10px; }
+    .hero p { max-width: 600px; margin: 0 auto 20px; font-size: 0.95rem; opacity: 0.9; }
+    .container { max-width: 1200px; margin: -30px auto 40px; padding: 0 1rem; position: relative; z-index: 10; }
+    .card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+    .card-title { text-align: center; font-size: 1.2rem; margin-bottom: 15px; color: var(--dark); }
+    .search-box { display: flex; gap: 10px; max-width: 500px; margin: 0 auto 15px; }
+    .search-box input { flex: 1; padding: 12px 15px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 0.95rem; }
+    .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .btn:hover { background: var(--primary-dark); }
+    .checkbox-container { text-align: center; font-size: 0.8rem; color: var(--gray); margin-bottom: 15px; }
+    .result-box { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; display: none; }
+    .catalog-title { text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
+    .catalog-subtitle { text-align: center; color: var(--gray); font-size: 0.85rem; margin-bottom: 20px; }
+    .categories { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+    .cat-btn { background: var(--white); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: 0.3s; }
+    .cat-btn.active, .cat-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .product-card { background: white; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .product-info { padding: 15px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-title { font-weight: bold; font-size: 1rem; margin-bottom: 8px; color: var(--dark); }
+    .prices { display: flex; justify-content: space-between; background: var(--light); padding: 10px; border-radius: 6px; margin-top: 10px; }
+    .price-tag { font-size: 0.8rem; }
+    .price-tag span { display: block; font-weight: bold; font-size: 0.95rem; color: var(--primary); }
+    footer { background: var(--dark); color: white; padding: 40px 1rem 20px; font-size: 0.85rem; margin-top: 50px; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; padding-bottom: 30px; border-bottom: 1px solid #333; }
+    .footer-bottom { max-width: 1200px; margin: 20px auto 0; display: flex; justify-content: space-between; align-items: center; color: #888; }
+    .admin-link { color: #888; text-decoration: none; cursor: pointer; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; position: relative; }
+    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 500; }
+    .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; }
+  </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="#inicio" class="logo">
-                <div class="logo-icon">DXN</div>
-                <div class="logo-text">
-                    <h1>DXN Salud & Vida</h1>
-                    <span>Distribuidor Autorizado</span>
-                </div>
-            </a>
-            <nav>
-                <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#puntos">Mis PV</a></li>
-                    <li><a href="#productos">Catálogo</a></li>
-                    <li><a href="#contacto">Ubicación</a></li>
-                    <li>
-                        <a href="https://wa.me/593990689086" target="_blank" class="btn-whatsapp-header">
-                            💬 0990689086
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+  <header>
+    <div class="nav-container">
+      <div class="logo-container">
+        <div class="logo-badge">DXN</div>
+        <div class="logo-text">
+          <h1>DXN Salud & Vida</h1>
+          <p>Distribuidor Autorizado</p>
         </div>
-    </header>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#pv">Mis PV</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#ubicacion">Ubicación</a></li>
+      </ul>
+      <a href="https://wa.me/593990689086" target="_blank" class="btn-ws">💬 0990689086</a>
+    </div>
+  </header>
 
-    <!-- Hero -->
-    <section id="inicio" class="hero">
-        <div class="hero-content">
-            <h2>DXN Salud, Bienestar & Libertad</h2>
-            <p>Descubre el poder del Ganoderma Lucidum y transforma tu estilo de vida con productos 100% orgánicos de la más alta calidad.</p>
-        </div>
-    </section>
+  <section class="hero" id="inicio">
+    <h2>DXN Salud, Bienestar & Libertad</h2>
+    <p>Descubre el poder del Ganoderma Lucidum y transforma tu estilo de vida con productos 100% orgánicos de la más alta calidad.</p>
+  </section>
 
-    <!-- Consulta de PV -->
-    <section id="puntos" class="container">
-        <div class="pv-card">
-            <div style="text-align: center;">
-                <h3 style="font-size: 1.35rem; color: var(--dark);">Consultar Mis Puntos de Volumen (PV)</h3>
-                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.2rem;">
-                    Revisa los PV de tus compras registradas
-                </p>
-            </div>
-
-            <form class="pv-form-group" onsubmit="buscarPV(event)">
-                <div class="pv-input-wrapper">
-                    <input type="text" id="cedulaInput" class="input-control" placeholder="Ingresa tu número de cédula o código..." required>
-                    <button type="submit" id="btnBuscarPV" class="btn-main">Consultar mis PV</button>
-                </div>
-
-                <label class="checkbox-container">
-                    <input type="checkbox" id="checkConsentimiento" required>
-                    Confirmo que consulto mi propia información.
-                </label>
-            </form>
-
-            <div id="pvErrorBox" class="pv-error-box">
-                <strong>No encontramos compras registradas</strong><br>
-                Verifica tu documento o contáctanos por WhatsApp para actualizar tus compras.
-            </div>
-
-            <div id="pvResultBox" class="pv-result-box">
-                <div class="pv-client-header">
-                    <div class="pv-client-name" id="resNombreCliente">Nombre del Cliente</div>
-                    <div class="pv-client-meta" id="resFechaMes">PV acumulados en octubre de 2026</div>
-                </div>
-
-                <div class="pv-big-score">
-                    <div class="number" id="resPVTotal">0.00 PV</div>
-                    <div class="label" id="resComparativaMes">Ves el mismo ritmo que en septiembre de 2026: 0.00 PV</div>
-                </div>
-
-                <div class="goal-item">
-                    <div class="goal-info">
-                        <span>Meta 30 PV (Calificación)</span>
-                        <span id="labelMeta30">Faltan 30.00 PV</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="barMeta30"></div>
-                    </div>
-                </div>
-
-                <div class="goal-item">
-                    <div class="goal-info">
-                        <span>Meta 100 PV (Rubí / Diamante)</span>
-                        <span id="labelMeta100">Faltan 100.00 PV</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="barMeta100"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Catálogo de Productos DXN Ecuador -->
-    <section id="productos" class="container">
-        <div class="section-header">
-            <h2 class="section-title">Catálogo de Productos DXN Ecuador</h2>
-            <p class="section-subtitle">Precios oficiales de venta al público y para distribuidores afiliados</p>
-        </div>
-
-        <!-- Filtros de Categoría -->
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
-            <button class="filter-btn" onclick="filtrarCategoria('bebidas', this)">Bebidas & Cafés</button>
-            <button class="filter-btn" onclick="filtrarCategoria('suplementos', this)">Suplementos</button>
-            <button class="filter-btn" onclick="filtrarCategoria('cuidado', this)">Cuidado Personal</button>
-        </div>
-
-        <div class="products-grid" id="productsGrid">
-            <!-- Carga dinámica por JavaScript -->
-        </div>
-    </section>
-
-    <!-- Modal Panel Administrador -->
-    <div id="adminModal" class="admin-modal">
-        <div class="admin-card">
-            <div class="admin-header">
-                <h3>⚙️ Administrar Clientes en la Nube</h3>
-                <button class="close-admin" onclick="cerrarAdmin()">✕</button>
-            </div>
-
-            <form onsubmit="guardarCliente(event)">
-                <h4 style="margin-bottom: 0.8rem; font-size: 0.95rem;">Añadir / Editar Cliente</h4>
-                <div class="admin-form-grid">
-                    <input type="text" id="adminCedula" class="input-control" placeholder="Cédula / Código" required>
-                    <input type="text" id="adminNombre" class="input-control" placeholder="Nombre completo" required>
-                    <input type="number" step="0.01" id="adminPVActual" class="input-control" placeholder="PV Mes Actual" required>
-                    <input type="number" step="0.01" id="adminPVAnterior" class="input-control" placeholder="PV Mes Anterior" required>
-                </div>
-                <button type="submit" id="btnGuardarAdmin" class="btn-main" style="width: 100%; background: var(--secondary);">Guardar en Internet</button>
-            </form>
-
-            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--border-color);">
-
-            <h4 style="margin-bottom: 0.8rem; font-size: 0.95rem;">Lista de Clientes Registrados</h4>
-            <div style="overflow-x: auto;">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Cédula</th>
-                            <th>Nombre</th>
-                            <th>PV Octubre</th>
-                            <th>PV Septiembre</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaClientesBody">
-                        <!-- Se llena dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="container" id="pv">
+    <div class="card">
+      <h3 class="card-title">Consultar Mis Puntos de Volumen (PV)</h3>
+      <div class="search-box">
+        <input type="text" id="inputCedula" placeholder="Ingresa tu número de cédula o código...">
+        <button class="btn" onclick="buscarPV()">Consultar mis PV</button>
+      </div>
+      <div class="checkbox-container">
+        <label><input type="checkbox" id="checkConfirm"> Confirmo que consulto mi propia información.</label>
+      </div>
+      <div class="result-box" id="resultadoPV"></div>
     </div>
 
-    <!-- Footer -->
-    <footer id="contacto">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h3>DXN Salud & Vida</h3>
-                <p>Distribución autorizada de productos de salud, nutrición y cuidado personal orgánico.</p>
-            </div>
-            <div class="footer-col">
-                <h3>Atención al Cliente</h3>
-                <p>WhatsApp: 0990689086</p>
-                <p>Calle Salustio Giler y Av. Esperanza, junto a Comercial Don Diego.</p>
-            </div>
+    <div id="catalogo">
+      <h2 class="catalog-title">Catálogo de Productos DXN Ecuador</h2>
+      <p class="catalog-subtitle">Precios oficiales de venta al público y para distribuidores afiliados</p>
+      
+      <div class="categories">
+        <button class="cat-btn active" onclick="filtrar('todos')">Todos</button>
+        <button class="cat-btn" onclick="filtrar('bebidas')">Bebidas & Cafés</button>
+        <button class="cat-btn" onclick="filtrar('suplementos')">Suplementos</button>
+        <button class="cat-btn" onclick="filtrar('cuidado')">Cuidado Personal</button>
+      </div>
+
+      <div class="products-grid" id="gridProductos"></div>
+    </div>
+  </div>
+
+  <footer id="ubicacion">
+    <div class="footer-grid">
+      <div>
+        <h3>DXN Salud & Vida</h3>
+        <p style="margin-top: 10px; color: #aaa;">Distribución autorizada de productos de salud, nutrición y cuidado personal orgánico.</p>
+      </div>
+      <div>
+        <h3>Atención al Cliente</h3>
+        <p style="margin-top: 10px; color: #aaa;">WhatsApp: 0990689086</p>
+        <p style="color: #aaa;">Calle Salustio Giller y Av. Esperanza, junto a Comercial Don Diego.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 DXN Salud & Vida - Todos los derechos reservados.</p>
+      <span class="admin-link" onclick="abrirAdmin()">⚙️ Acceso Administrador</span>
+    </div>
+  </footer>
+
+  <div class="modal" id="modalAdmin">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarAdmin()">&times;</span>
+      <h3 style="margin-bottom: 15px;">Panel Administrador</h3>
+      <div id="loginSection">
+        <div class="form-group">
+          <label>PIN de Administrador</label>
+          <input type="password" id="pinInput" placeholder="Ingresa el PIN">
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 DXN Salud & Vida - Todos los derechos reservados.</p>
-            <span class="admin-link" onclick="solicitarAccesoAdmin()">⚙️ Acceso Administrador</span>
+        <button class="btn" style="width: 100%;" onclick="loginAdmin()">Ingresar</button>
+      </div>
+      <div id="adminPanelSection" style="display: none;">
+        <h4 style="margin-bottom: 10px;">Registrar Compras / PV</h4>
+        <div class="form-group">
+          <label>Cédula del Cliente</label>
+          <input type="text" id="regCedula" placeholder="Ej: 1300000000">
         </div>
-    </footer>
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" id="regNombre" placeholder="Ej: Juan Pérez">
+        </div>
+        <div class="form-group">
+          <label>Puntos de Volumen (PV)</label>
+          <input type="number" id="regPV" placeholder="Ej: 150.5">
+        </div>
+        <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar Registro</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- Flotante WhatsApp -->
-    <a href="https://wa.me/593990689086?text=Hola,%20quisiera%20consultar%20sobre%20los%20productos" class="whatsapp-float" target="_blank">💬</a>
+  <script>
+    // =========================================================
+    // CONFIGURACIÓN JSONBIN & CREDENCIALES
+    // =========================================================
+    const JSONBIN_ID = "6ac68df3ffd5d1605356df4f";
+    const JSONBIN_KEY = "$2a$10$4srvcRSSt6sEm.MNKnGlieh9R0/81bUt5nLc1gzS81Me5cLEPXmBy";
+    const PIN_ADMIN = "23504381";
 
-    <!-- LÓGICA DE JAVASCRIPT Y CONEXIÓN A LA NUBE -->
-    <script>
-        // =========================================================
-        // CONFIGURACIÓN JSONBIN (PEGA TUS CLAVES AQUÍ DENTRO DE LAS COMILLAS)
-        // =========================================================
-        const JSONBIN_ID = "6ac68df3ffd5d1605356df4f";
-        const JSONBIN_KEY = "$2a$10$4srvcRSSt6sEm.MNKnGlieh9RO/8lbUt5nLc1gzS81Me5cLEPXmBy";
-        const PIN_ADMIN = "235043";
+    // =========================================================
+    // PRODUCTOS Y PRECIOS DXN ECUADOR
+    // =========================================================
+    const productos = [
+      // BEBIDAS Y CAFÉS
+      { id: 1, nombre: "Dxn Lingzhi Coffee 3 En 1", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
+      { id: 2, nombre: "Dxn Lingzhi Black Coffee", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
+      { id: 3, nombre: "Dxn White Coffee Zhino", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
+      { id: 4, nombre: "Dxn Cocozhi", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
+      { id: 5, nombre: "Dxn Zhi Mocha", categoria: "bebidas", cliente: 40.50, distribuidor: 28.50 },
+      { id: 6, nombre: "Dxn Lions Mane Lemon Matcha", categoria: "bebidas", cliente: 33.00, distribuidor: 21.00 },
+      { id: 7, nombre: "Dxn Non Dairy Creamer", categoria: "bebidas", cliente: 18.20, distribuidor: 6.20 },
+      { id: 8, nombre: "Dxn Zhi Roasted Coffee", categoria: "bebidas", cliente: 35.30, distribuidor: 23.30 },
+      { id: 9, nombre: "Dxn Spirulina Coffe", categoria: "bebidas", cliente: 37.00, distribuidor: 25.00 },
+      { id: 10, nombre: "Dxn Ootea Lingzhi Black Coffe Mix", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
+      { id: 11, nombre: "Dxn Lion Mane Coffee", categoria: "bebidas", cliente: 36.70, distribuidor: 24.70 },
 
-        // --- CONEXIÓN BASE DE DATOS EN LA NUBE ---
-        async function obtenerClientesDeLaNube() {
-            try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': JSONBIN_KEY }
-                });
-                const data = await res.json();
-                return data.record || {};
-            } catch (err) {
-                console.error("Error conectando con la nube:", err);
-                alert("Error de conexión a la base de datos.");
-                return {};
-            }
-        }
+      // SUPLEMENTOS
+      { id: 12, nombre: "Dxn Spirulina Tablet 120s", categoria: "suplementos", cliente: 38.40, distribuidor: 26.40 },
+      { id: 13, nombre: "Dxn Spirulina Capsula 30s", categoria: "suplementos", cliente: 19.20, distribuidor: 7.20 },
+      { id: 14, nombre: "Dxn Morinzyme", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
+      { id: 15, nombre: "Dxn Morinzhi", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
+      { id: 16, nombre: "Dxn Roselle", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
 
-        async function actualizarNube(nuevaBaseDatos) {
-            try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_KEY
-                    },
-                    body: JSON.stringify(nuevaBaseDatos)
-                });
-                return res.ok;
-            } catch (err) {
-                console.error("Error al actualizar la nube:", err);
-                return false;
-            }
-        }
+      // CUIDADO PERSONAL
+      { id: 17, nombre: "Dxn Ganozhi Pasta Dental", categoria: "cuidado", cliente: 18.80, distribuidor: 13.80 },
+      { id: 18, nombre: "Dxn Ganozhi Shampoo", categoria: "cuidado", cliente: 31.00, distribuidor: 26.00 },
+      { id: 19, nombre: "Dxn Ganozhi Gel De Baño", categoria: "cuidado", cliente: 38.00, distribuidor: 26.00 },
+      { id: 20, nombre: "Dxn Aceite De Masaje Gano", categoria: "cuidado", cliente: 28.90, distribuidor: 16.90 },
+      { id: 21, nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", cliente: 11.90, distribuidor: 6.90 }
+    ];
 
-        // --- BÚSQUEDA DE PV ---
-        async function buscarPV(event) {
-            event.preventDefault();
+    // Cargar productos al iniciar
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProductos(productos);
+    });
 
-            const cedula = document.getElementById('cedulaInput').value.trim();
-            const btn = document.getElementById('btnBuscarPV');
-            const resultBox = document.getElementById('pvResultBox');
-            const errorBox = document.getElementById('pvErrorBox');
+    function renderProductos(lista) {
+      const grid = document.getElementById("gridProductos");
+      grid.innerHTML = "";
+      lista.forEach(p => {
+        grid.innerHTML += `
+          <div class="product-card">
+            <div class="product-info">
+              <div class="product-title">${p.nombre}</div>
+              <div class="prices">
+                <div class="price-tag">
+                  Cliente
+                  <span>$${p.cliente.toFixed(2)}</span>
+                </div>
+                <div class="price-tag">
+                  Distribuidor
+                  <span>$${p.distribuidor.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
 
-            if(!cedula) return;
+    function filtrar(cat) {
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      if (cat === 'todos') {
+        renderProductos(productos);
+      } else {
+        renderProductos(productos.filter(p => p.categoria === cat));
+      }
+    }
 
-            btn.innerHTML = 'Consultando en la nube...';
-            btn.disabled = true;
-
-            const bd = await obtenerClientesDeLaNube();
-
-            btn.innerHTML = 'Consultar mis PV';
-            btn.disabled = false;
-
-            if (bd[cedula]) {
-                const cliente = bd[cedula];
-                errorBox.style.display = 'none';
-
-                document.getElementById('resNombreCliente').innerText = "Hola, " + cliente.nombre;
-                document.getElementById('resPVTotal').innerText = Number(cliente.pvOctubre).toFixed(2) + ' PV';
-                document.getElementById('resComparativaMes').innerText = `Ves el mismo ritmo que en septiembre de 2026: ${Number(cliente.pvSeptiembre).toFixed(2)} PV`;
-
-                const pvActual = Number(cliente.pvOctubre);
-
-                // Meta 30
-                const falta30 = Math.max(0, 30 - pvActual);
-                const pct30 = Math.min(100, (pvActual / 30) * 100);
-                document.getElementById('barMeta30').style.width = pct30 + '%';
-                document.getElementById('labelMeta30').innerText = falta30 === 0 ? '¡Meta Completada! 🎉' : `Faltan ${falta30.toFixed(2)} PV`;
-
-                // Meta 100
-                const falta100 = Math.max(0, 100 - pvActual);
-                const pct100 = Math.min(100, (pvActual / 100) * 100);
-                document.getElementById('barMeta100').style.width = pct100 + '%';
-                document.getElementById('labelMeta100').innerText = falta100 === 0 ? '¡Meta Completada! 🎉' : `Faltan ${falta100.toFixed(2)} PV`;
-
-                resultBox.style.display = 'block';
-                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            } else {
-                resultBox.style.display = 'none';
-                errorBox.style.display = 'block';
-                errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
-
-        // --- PANEL ADMINISTRADOR ---
-        async function solicitarAccesoAdmin() {
-            const claveIngresada = prompt("Ingresa el PIN de Administrador:");
-            if (claveIngresada === PIN_ADMIN) {
-                document.getElementById('adminModal').style.display = 'flex';
-                await renderizarTablaAdmin();
-            } else if (claveIngresada !== null) {
-                alert("PIN incorrecto.");
-            }
-        }
-
-        function cerrarAdmin() {
-            document.getElementById('adminModal').style.display = 'none';
-        }
-
-        async function renderizarTablaAdmin() {
-            const tbody = document.getElementById('tablaClientesBody');
-            tbody.innerHTML = '<tr><td colspan="5">Cargando datos de la nube...</td></tr>';
-            
-            const bd = await obtenerClientesDeLaNube();
-            tbody.innerHTML = '';
-
-            Object.keys(bd).forEach(cedula => {
-                const client = bd[cedula];
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${cedula}</td>
-                    <td>${client.nombre}</td>
-                    <td>${Number(client.pvOctubre).toFixed(2)}</td>
-                    <td>${Number(client.pvSeptiembre).toFixed(2)}</td>
-                    <td><button class="btn-danger" onclick="eliminarCliente('${cedula}')">Eliminar</button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        async function guardarCliente(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnGuardarAdmin');
-            const cedula = document.getElementById('adminCedula').value.trim();
-            const nombre = document.getElementById('adminNombre').value.trim();
-            const pvActual = parseFloat(document.getElementById('adminPVActual').value);
-            const pvAnterior = parseFloat(document.getElementById('adminPVAnterior').value);
-
-            btn.innerText = 'Guardando en la nube...';
-            btn.disabled = true;
-
-            const bd = await obtenerClientesDeLaNube();
-            bd[cedula] = {
-                nombre: nombre,
-                pvOctubre: pvActual,
-                pvSeptiembre: pvAnterior
-            };
-
-            const exito = await actualizarNube(bd);
-
-            btn.innerText = 'Guardar en Internet';
-            btn.disabled = false;
-
-            if(exito) {
-                document.getElementById('adminCedula').value = '';
-                document.getElementById('adminNombre').value = '';
-                document.getElementById('adminPVActual').value = '';
-                document.getElementById('adminPVAnterior').value = '';
-
-                await renderizarTablaAdmin();
-                alert("✅ Cliente registrado exitosamente en la nube.");
-            } else {
-                alert("❌ Error al guardar. Verifica la conexión o tus claves de JSONBin.");
-            }
-        }
-
-        async function eliminarCliente(cedula) {
-            if (confirm(`¿Deseas eliminar al cliente ${cedula}?`)) {
-                const bd = await obtenerClientesDeLaNube();
-                delete bd[cedula];
-                await actualizarNube(bd);
-                await renderizarTablaAdmin();
-            }
-        }
-
-        // --- PRODUCTOS DXN ECUADOR ---
-const productos = [
-  // BEBIDAS Y CAFÉS
-  { id: 1, nombre: "Dxn Lingzhi Coffee 3 En 1", categoria: "bebidas", precio: 36.60, cliente: 36.60, distribuidor: 24.60, precioCliente: 36.60, precioDistribuidor: 24.60, descripcion: "Bebida DXN", imagen: "" },
-  { id: 2, nombre: "Dxn Lingzhi Black Coffee", categoria: "bebidas", precio: 36.60, cliente: 36.60, distribuidor: 24.60, precioCliente: 36.60, precioDistribuidor: 24.60, descripcion: "Bebida DXN", imagen: "" },
-  { id: 3, nombre: "Dxn White Coffee Zhino", categoria: "bebidas", precio: 41.80, cliente: 41.80, distribuidor: 29.80, precioCliente: 41.80, precioDistribuidor: 29.80, descripcion: "Bebida DXN", imagen: "" },
-  { id: 4, nombre: "Dxn Cocozhi", categoria: "bebidas", precio: 41.80, cliente: 41.80, distribuidor: 29.80, precioCliente: 41.80, precioDistribuidor: 29.80, descripcion: "Bebida DXN", imagen: "" },
-  { id: 5, nombre: "Dxn Zhi Mocha", categoria: "bebidas", precio: 40.50, cliente: 40.50, distribuidor: 28.50, precioCliente: 40.50, precioDistribuidor: 28.50, descripcion: "Bebida DXN", imagen: "" },
-  { id: 6, nombre: "Dxn Lions Mane Lemon Matcha", categoria: "bebidas", precio: 33.00, cliente: 33.00, distribuidor: 21.00, precioCliente: 33.00, precioDistribuidor: 21.00, descripcion: "Bebida DXN", imagen: "" },
-  { id: 7, nombre: "Dxn Non Dairy Creamer", categoria: "bebidas", precio: 18.20, cliente: 18.20, distribuidor: 6.20, precioCliente: 18.20, precioDistribuidor: 6.20, descripcion: "Bebida DXN", imagen: "" },
-  { id: 8, nombre: "Dxn Zhi Roasted Coffee", categoria: "bebidas", precio: 35.30, cliente: 35.30, distribuidor: 23.30, precioCliente: 35.30, precioDistribuidor: 23.30, descripcion: "Bebida DXN", imagen: "" },
-  { id: 9, nombre: "Dxn Spirulina Coffe", categoria: "bebidas", precio: 37.00, cliente: 37.00, distribuidor: 25.00, precioCliente: 37.00, precioDistribuidor: 25.00, descripcion: "Bebida DXN", imagen: "" },
-  { id: 10, nombre: "Dxn Ootea Lingzhi Black Coffe Mix", categoria: "bebidas", precio: 36.60, cliente: 36.60, distribuidor: 24.60, precioCliente: 36.60, precioDistribuidor: 24.60, descripcion: "Bebida DXN", imagen: "" },
-  { id: 11, nombre: "Dxn Lion Mane Coffee", categoria: "bebidas", precio: 36.70, cliente: 36.70, distribuidor: 24.70, precioCliente: 36.70, precioDistribuidor: 24.70, descripcion: "Bebida DXN", imagen: "" },
-
-  // SUPLEMENTOS
-  { id: 12, nombre: "Dxn Spirulina Tablet 120s", categoria: "suplementos", precio: 38.40, cliente: 38.40, distribuidor: 26.40, precioCliente: 38.40, precioDistribuidor: 26.40, descripcion: "Suplemento DXN", imagen: "" },
-  { id: 13, nombre: "Dxn Spirulina Capsula 30s", categoria: "suplementos", precio: 19.20, cliente: 19.20, distribuidor: 7.20, precioCliente: 19.20, precioDistribuidor: 7.20, descripcion: "Suplemento DXN", imagen: "" },
-  { id: 14, nombre: "Dxn Morinzyme", categoria: "suplementos", precio: 38.30, cliente: 38.30, distribuidor: 26.30, precioCliente: 38.30, precioDistribuidor: 26.30, descripcion: "Suplemento DXN", imagen: "" },
-  { id: 15, nombre: "Dxn Morinzhi", categoria: "suplementos", precio: 38.30, cliente: 38.30, distribuidor: 26.30, precioCliente: 38.30, precioDistribuidor: 26.30, descripcion: "Suplemento DXN", imagen: "" },
-  { id: 16, nombre: "Dxn Roselle", categoria: "suplementos", precio: 38.30, cliente: 38.30, distribuidor: 26.30, precioCliente: 38.30, precioDistribuidor: 26.30, descripcion: "Suplemento DXN", imagen: "" },
-
-  // CUIDADO PERSONAL
-  { id: 17, nombre: "Dxn Ganozhi Pasta Dental", categoria: "cuidado", precio: 18.80, cliente: 18.80, distribuidor: 13.80, precioCliente: 18.80, precioDistribuidor: 13.80, descripcion: "Cuidado Personal", imagen: "" },
-  { id: 18, nombre: "Dxn Ganozhi Shampoo", categoria: "cuidado", precio: 31.00, cliente: 31.00, distribuidor: 26.00, precioCliente: 31.00, precioDistribuidor: 26.00, descripcion: "Cuidado Personal", imagen: "" },
-  { id: 19, nombre: "Dxn Ganozhi Gel De Baño", categoria: "cuidado", precio: 38.00, cliente: 38.00, distribuidor: 26.00, precioCliente: 38.00, precioDistribuidor: 26.00, descripcion: "Cuidado Personal", imagen: "" },
-  { id: 20, nombre: "Dxn Aceite De Masaje Gano", categoria: "cuidado", precio: 28.90, cliente: 28.90, distribuidor: 16.90, precioCliente: 28.90, precioDistribuidor: 16.90, descripcion: "Cuidado Personal", imagen: "" },
-  { id: 21, nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", precio: 11.90, cliente: 11.90, distribuidor: 6.90, precioCliente: 11.90, precioDistribuidor: 6.90, descripcion: "Cuidado Personal", imagen: "" }
-];
-        function renderizarProductos(categoria = 'todos') {
-            const grid = document.getElementById('productsGrid');
-            if(!grid) return;
-            
-            grid.innerHTML = '';
-            const productosFiltrados = categoria === 'todos' ? productosDXN : productosDXN.filter(p => p.categoria === categoria);
-
-            productosFiltrados.forEach(prod => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <img src="${prod.imagen}" alt="${prod.nombre}" class="product-img">
-                    <div class="product-body">
-                        <span class="product-category">${prod.categoria}</span>
-                        <h3 class="product-title">${prod.nombre}</h3>
-                        <span class="product-pv">⭐ ${prod.pv.toFixed(2)} PV</span>
-                        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem;">${prod.desc}</p>
-                        
-                        <div class="product-prices">
-                            <div>
-                                <div class="price-public">$${prod.precioPublico.toFixed(2)}</div>
-                                <div class="price-socio">Socio: $${prod.precioSocio.toFixed(2)}</div>
-                            </div>
-                        </div>
-
-                        <a href="https://wa.me/593990689086?text=${encodeURIComponent('Hola, deseo pedir el producto: ' + prod.nombre)}" 
-                           target="_blank" 
-                           class="btn-buy-wa">
-                           🛒 Pedir por WhatsApp
-                        </a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filtrarCategoria(categoria, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizarProductos(categoria);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderizarProductos('todos');
+    // =========================================================
+    // BASE DE DATOS EN LA NUBE (JSONBIN)
+    // =========================================================
+    async function obtenerClientesDeLaNube() {
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+          headers: { 'X-Master-Key': JSONBIN_KEY }
         });
-    </script>
+        const data = await res.json();
+        return data.record || {};
+      } catch (err) {
+        console.error("Error al obtener datos:", err);
+        return {};
+      }
+    }
+
+    async function buscarPV() {
+      const cedula = document.getElementById("inputCedula").value.trim();
+      const check = document.getElementById("checkConfirm").checked;
+      const resBox = document.getElementById("resultadoPV");
+
+      if (!cedula) {
+        alert("Por favor ingresa un número de cédula.");
+        return;
+      }
+      if (!check) {
+        alert("Debes confirmar que consultas tu propia información.");
+        return;
+      }
+
+      resBox.style.display = "block";
+      resBox.innerHTML = "<p>Cargando información...</p>";
+
+      const clientes = await obtenerClientesDeLaNube();
+
+      if (clientes[cedula]) {
+        const c = clientes[cedula];
+        resBox.innerHTML = `
+          <h4 style="color: var(--primary);">¡Hola, ${c.nombre}!</h4>
+          <p style="font-size: 1.1rem; margin-top: 5px;">Tienes un total acumulado de: <strong>${c.pv} PV</strong></p>
+        `;
+      } else {
+        resBox.innerHTML = `<p style="color: #c00;">No se encontró información registrada para la cédula ${cedula}.</p>`;
+      }
+    }
+
+    // =========================================================
+    // ADMINISTRACIÓN
+    // =========================================================
+    function abrirAdmin() {
+      document.getElementById("modalAdmin").style.display = "flex";
+    }
+    function cerrarAdmin() {
+      document.getElementById("modalAdmin").style.display = "none";
+    }
+    function loginAdmin() {
+      const pin = document.getElementById("pinInput").value;
+      if (pin === PIN_ADMIN) {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("adminPanelSection").style.display = "block";
+      } else {
+        alert("PIN Incorrecto.");
+      }
+    }
+
+    async function guardarCliente() {
+      const cedula = document.getElementById("regCedula").value.trim();
+      const nombre = document.getElementById("regNombre").value.trim();
+      const pv = parseFloat(document.getElementById("regPV").value);
+
+      if (!cedula || !nombre || isNaN(pv)) {
+        alert("Completa todos los campos correctamente.");
+        return;
+      }
+
+      const clientes = await obtenerClientesDeLaNube();
+      clientes[cedula] = { nombre: nombre, pv: pv };
+
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_KEY
+          },
+          body: JSON.stringify(clientes)
+        });
+        alert("¡Registro guardado con éxito!");
+        document.getElementById("regCedula").value = "";
+        document.getElementById("regNombre").value = "";
+        document.getElementById("regPV").value = "";
+      } catch (err) {
+        alert("Error al guardar en la nube.");
+        console.error(err);
+      }
+    }
+  </script>
 </body>
 </html>
