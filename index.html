@@ -72,6 +72,8 @@
     .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; }
     .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
     .cart-item-btn { background: #ff4d4d; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
+    
+    .verify-box { background: var(--light); padding: 12px; border-radius: 6px; margin-bottom: 15px; border: 1px dashed var(--border); }
   </style>
 </head>
 <body>
@@ -141,10 +143,20 @@
       
       <div class="form-group">
         <label>Tipo de Comprador:</label>
-        <select id="tipoPrecio" onchange="actualizarCarritoView()">
+        <select id="tipoPrecio" onchange="cambiarTipoComprador()">
           <option value="cliente">Cliente Final (Público)</option>
           <option value="distribuidor">Distribuidor Afiliado</option>
         </select>
+      </div>
+
+      <!-- SECCIÓN VALIDACIÓN DE DISTRIBUIDOR -->
+      <div class="verify-box" id="secVerificacion" style="display: none;">
+        <label style="font-size: 0.85rem; font-weight: bold;">Código de Distribuidor (9 dígitos):</label>
+        <div style="display: flex; gap: 5px; margin-top: 5px;">
+          <input type="text" id="codigoDistribuidor" maxlength="9" placeholder="Ej: 818000000" style="padding: 8px; font-size: 0.9rem; flex: 1; border: 1px solid var(--border); border-radius: 5px;">
+          <button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="validarCodigoDistribuidor()">Verificar</button>
+        </div>
+        <div id="msgVerificacion" style="font-size: 0.8rem; margin-top: 5px;"></div>
       </div>
 
       <div id="cartItemsContainer" style="margin-bottom: 15px;"></div>
@@ -189,22 +201,41 @@
         </div>
         <button class="btn" style="width: 100%;" onclick="loginAdmin()">Ingresar</button>
       </div>
+      
       <div id="adminPanelSection" style="display: none;">
-        <h4 style="margin-bottom: 10px;">Registrar Compras / PV</h4>
-        <div class="form-group">
-          <label>Cédula del Cliente</label>
-          <input type="text" id="regCedula" placeholder="Ej: 1300000000">
+        <!-- REGISTRO DE PV -->
+        <div style="background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV (Por Cédula)</h4>
+          <div class="form-group">
+            <label>Cédula del Cliente</label>
+            <input type="text" id="regCedula" placeholder="Ej: 1300000000">
+          </div>
+          <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" id="regNombre" placeholder="Ej: Juan Pérez">
+          </div>
+          <div class="form-group">
+            <label>Puntos de Volumen (PV)</label>
+            <input type="number" id="regPV" placeholder="Ej: 150.5">
+          </div>
+          <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar Puntos PV</button>
         </div>
-        <div class="form-group">
-          <label>Nombre Completo</label>
-          <input type="text" id="regNombre" placeholder="Ej: Juan Pérez">
+
+        <!-- REGISTRO DE DISTRIBUIDOR AFILIADO -->
+        <div style="background: var(--light); padding: 15px; border-radius: 8px;">
+          <h4 style="margin-bottom: 10px; color: var(--secondary);">2. Registrar Distribuidor Afiliado</h4>
+          <div class="form-group">
+            <label>Código de Distribuidor (9 dígitos)</label>
+            <input type="text" id="regCodDistribuidor" maxlength="9" placeholder="Ej: 818123456">
+          </div>
+          <div class="form-group">
+            <label>Nombre del Distribuidor</label>
+            <input type="text" id="regNombreDistribuidor" placeholder="Ej: Maria López">
+          </div>
+          <button class="btn" style="width: 100%; background: var(--secondary);" onclick="guardarDistribuidor()">Guardar Código de Distribuidor</button>
         </div>
-        <div class="form-group">
-          <label>Puntos de Volumen (PV)</label>
-          <input type="number" id="regPV" placeholder="Ej: 150.5">
-        </div>
-        <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar Registro</button>
       </div>
+
     </div>
   </div>
 
@@ -249,6 +280,8 @@
     ];
 
     let carrito = [];
+    let distribuidorValidado = false;
+    let nombreDistribuidorActivo = "";
 
     document.addEventListener("DOMContentLoaded", () => {
       renderProductos(productos);
@@ -314,16 +347,63 @@
 
     function abrirCarrito() {
       document.getElementById("modalCarrito").style.display = "flex";
-      actualizarCarritoView();
+      cambiarTipoComprador();
     }
 
     function cerrarCarrito() {
       document.getElementById("modalCarrito").style.display = "none";
     }
 
+    function cambiarTipoComprador() {
+      const tipo = document.getElementById("tipoPrecio").value;
+      const secVerif = document.getElementById("secVerificacion");
+
+      if (tipo === "distribuidor" && !distribuidorValidado) {
+        secVerif.style.display = "block";
+      } else if (tipo === "distribuidor" && distribuidorValidado) {
+        secVerif.style.display = "block";
+        document.getElementById("msgVerificacion").innerHTML = `<span style="color: green; font-weight: bold;">✔ Verificado: ${nombreDistribuidorActivo}</span>`;
+      } else {
+        secVerif.style.display = "none";
+      }
+
+      actualizarCarritoView();
+    }
+
+    async function validarCodigoDistribuidor() {
+      const cod = document.getElementById("codigoDistribuidor").value.trim();
+      const msgBox = document.getElementById("msgVerificacion");
+
+      if (cod.length !== 9 || isNaN(cod)) {
+        msgBox.innerHTML = "<span style='color: red;'>El código debe ser de exactamente 9 dígitos.</span>";
+        return;
+      }
+
+      msgBox.innerHTML = "<span style='color: #666;'>Verificando código...</span>";
+
+      const db = await obtenerNubeCompleta();
+      const distribuidores = db.distribuidores || {};
+
+      if (distribuidores[cod]) {
+        distribuidorValidado = true;
+        nombreDistribuidorActivo = distribuidores[cod];
+        msgBox.innerHTML = `<span style="color: green; font-weight: bold;">✔ Código Válido: ${nombreDistribuidorActivo}</span>`;
+        actualizarCarritoView();
+      } else {
+        distribuidorValidado = false;
+        nombreDistribuidorActivo = "";
+        msgBox.innerHTML = "<span style='color: red;'>❌ Código no registrado en el sistema.</span>";
+        actualizarCarritoView();
+      }
+    }
+
     function actualizarCarritoView() {
       const container = document.getElementById("cartItemsContainer");
       const tipo = document.getElementById("tipoPrecio").value;
+      
+      // Aplicar precio de distribuidor solo si está validado
+      const esDistribuidorValido = (tipo === "distribuidor" && distribuidorValidado);
+      
       container.innerHTML = "";
 
       if (carrito.length === 0) {
@@ -335,7 +415,7 @@
       let total = 0;
 
       carrito.forEach((item, index) => {
-        const precioUnitario = tipo === "cliente" ? item.cliente : item.distribuidor;
+        const precioUnitario = esDistribuidorValido ? item.distribuidor : item.cliente;
         const subtotal = precioUnitario * item.cantidad;
         total += subtotal;
 
@@ -364,17 +444,23 @@
 
     function enviarPedidoWhatsApp() {
       if (carrito.length === 0) {
-        alert("Tu carrito está vacío. Agrega productos antes de realizar el pedido.");
+        alert("Tu carrito está vacío.");
         return;
       }
 
       const tipo = document.getElementById("tipoPrecio").value;
-      const tipoTexto = tipo === "cliente" ? "Cliente Final" : "Distribuidor Afiliado";
+
+      if (tipo === "distribuidor" && !distribuidorValidado) {
+        alert("Debes ingresar un código de 9 dígitos válido para comprar con precio de distribuidor.");
+        return;
+      }
+
+      const tipoTexto = tipo === "distribuidor" ? `Distribuidor Afiliado (${nombreDistribuidorActivo})` : "Cliente Final";
       let mensaje = `Hola DXN Salud & Vida, deseo realizar el siguiente pedido como *${tipoTexto}*:\n\n`;
 
       let total = 0;
       carrito.forEach(item => {
-        const precioUnitario = tipo === "cliente" ? item.cliente : item.distribuidor;
+        const precioUnitario = (tipo === "distribuidor" && distribuidorValidado) ? item.distribuidor : item.cliente;
         const subtotal = precioUnitario * item.cantidad;
         total += subtotal;
         mensaje += `• *${item.cantidad}x* ${item.nombre} ($${subtotal.toFixed(2)})\n`;
@@ -389,16 +475,16 @@
     // =========================================================
     // BASE DE DATOS EN LA NUBE (JSONBIN)
     // =========================================================
-    async function obtenerClientesDeLaNube() {
+    async function obtenerNubeCompleta() {
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
           headers: { 'X-Master-Key': JSONBIN_KEY }
         });
         const data = await res.json();
-        return data.record || {};
+        return data.record || { clientes: {}, distribuidores: {} };
       } catch (err) {
         console.error("Error al obtener datos:", err);
-        return {};
+        return { clientes: {}, distribuidores: {} };
       }
     }
 
@@ -419,7 +505,8 @@
       resBox.style.display = "block";
       resBox.innerHTML = "<p>Cargando información...</p>";
 
-      const clientes = await obtenerClientesDeLaNube();
+      const db = await obtenerNubeCompleta();
+      const clientes = db.clientes || {};
 
       if (clientes[cedula]) {
         const c = clientes[cedula];
@@ -457,12 +544,14 @@
       const pv = parseFloat(document.getElementById("regPV").value);
 
       if (!cedula || !nombre || isNaN(pv)) {
-        alert("Completa todos los campos correctamente.");
+        alert("Completa todos los campos de cliente.");
         return;
       }
 
-      const clientes = await obtenerClientesDeLaNube();
-      clientes[cedula] = { nombre: nombre, pv: pv };
+      const db = await obtenerNubeCompleta();
+      if (!db.clientes) db.clientes = {};
+
+      db.clientes[cedula] = { nombre: nombre, pv: pv };
 
       try {
         await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
@@ -471,15 +560,45 @@
             'Content-Type': 'application/json',
             'X-Master-Key': JSONBIN_KEY
           },
-          body: JSON.stringify(clientes)
+          body: JSON.stringify(db)
         });
-        alert("¡Registro guardado con éxito!");
+        alert("¡Registro de PV guardado con éxito!");
         document.getElementById("regCedula").value = "";
         document.getElementById("regNombre").value = "";
         document.getElementById("regPV").value = "";
       } catch (err) {
         alert("Error al guardar en la nube.");
-        console.error(err);
+      }
+    }
+
+    async function guardarDistribuidor() {
+      const cod = document.getElementById("regCodDistribuidor").value.trim();
+      const nombre = document.getElementById("regNombreDistribuidor").value.trim();
+
+      if (cod.length !== 9 || isNaN(cod) || !nombre) {
+        alert("El código debe ser numérico de 9 dígitos y debes ingresar el nombre.");
+        return;
+      }
+
+      const db = await obtenerNubeCompleta();
+      if (!db.distribuidores) db.distribuidores = {};
+
+      db.distribuidores[cod] = nombre;
+
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_KEY
+          },
+          body: JSON.stringify(db)
+        });
+        alert("¡Distribuidor registrado con éxito!");
+        document.getElementById("regCodDistribuidor").value = "";
+        document.getElementById("regNombreDistribuidor").value = "";
+      } catch (err) {
+        alert("Error al guardar en la nube.");
       }
     }
   </script>
