@@ -37,7 +37,15 @@
     .search-box input { flex: 1; padding: 12px 15px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 0.95rem; }
     .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
     .btn:hover { background: var(--primary-dark); }
-    .btn-add { background: var(--secondary); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; transition: 0.3s; }
+    
+    /* CONTROL DE CANTIDAD Y SUMADOR EN TARJETA */
+    .qty-control { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; }
+    .qty-btn { background: #e0e0e0; border: none; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .qty-btn:hover { background: #ccc; }
+    .qty-val { font-weight: bold; font-size: 0.95rem; width: 20px; text-align: center; }
+    .card-total-preview { font-size: 0.85rem; color: var(--primary); font-weight: bold; text-align: center; margin-bottom: 8px; }
+
+    .btn-add { background: var(--secondary); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
     .btn-add:hover { background: #006699; }
     .checkbox-container { text-align: center; font-size: 0.8rem; color: var(--gray); margin-bottom: 15px; }
     .result-box { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; display: none; }
@@ -291,11 +299,15 @@
       { id: 21, nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", cliente: 11.90, distribuidor: 6.90 }
     ];
 
+    let cantidadesSeleccionadas = {};
     let carrito = [];
     let distribuidorValidado = false;
     let nombreDistribuidorActivo = "";
 
     document.addEventListener("DOMContentLoaded", () => {
+      productos.forEach(p => {
+        cantidadesSeleccionadas[p.id] = 1;
+      });
       renderProductos(productos);
     });
 
@@ -303,6 +315,9 @@
       const grid = document.getElementById("gridProductos");
       grid.innerHTML = "";
       lista.forEach(p => {
+        const cant = cantidadesSeleccionadas[p.id] || 1;
+        const totalAcumulado = p.cliente * cant;
+
         grid.innerHTML += `
           <div class="product-card">
             <div class="product-info">
@@ -313,11 +328,34 @@
               </div>
             </div>
             <div style="padding: 0 15px 15px;">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="cambiarCantidad(${p.id}, -1)">-</button>
+                <span class="qty-val" id="qty-val-${p.id}">${cant}</span>
+                <button class="qty-btn" onclick="cambiarCantidad(${p.id}, 1)">+</button>
+              </div>
+              <div class="card-total-preview" id="preview-${p.id}">Subtotal: $${totalAcumulado.toFixed(2)}</div>
               <button class="btn-add" onclick="agregarAlCarrito(${p.id})">🛒 Agregar al Carrito</button>
             </div>
           </div>
         `;
       });
+    }
+
+    function cambiarCantidad(id, cambio) {
+      let actual = cantidadesSeleccionadas[id] || 1;
+      actual += cambio;
+      if (actual < 1) actual = 1;
+      cantidadesSeleccionadas[id] = actual;
+
+      const elQty = document.getElementById(`qty-val-${id}`);
+      const elPrev = document.getElementById(`preview-${id}`);
+      const prod = productos.find(p => p.id === id);
+
+      if (elQty && elPrev && prod) {
+        elQty.innerText = actual;
+        const subtotal = prod.cliente * actual;
+        elPrev.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
+      }
     }
 
     function filtrar(cat) {
@@ -332,13 +370,18 @@
 
     function agregarAlCarrito(id) {
       const prod = productos.find(p => p.id === id);
+      const cantElegida = cantidadesSeleccionadas[id] || 1;
       const existe = carrito.find(item => item.id === id);
+      
       if (existe) {
-        existe.cantidad++;
+        existe.cantidad += cantElegida;
       } else {
-        carrito.push({ ...prod, cantidad: 1 });
+        carrito.push({ ...prod, cantidad: cantElegida });
       }
       actualizarContadorCarrito();
+      
+      cantidadesSeleccionadas[id] = 1;
+      cambiarCantidad(id, 0);
     }
 
     function actualizarContadorCarrito() {
