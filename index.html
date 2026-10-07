@@ -1,496 +1,678 @@
-<script>
-  // =========================================================
-  // CONFIGURACIÓN JSONBIN & CREDENCIALES
-  // =========================================================
-  const JSONBIN_ID = "6ac68df3ffd5d1605356df4f";
-  const JSONBIN_KEY = "$2a$10$4srvcRSSt6sEm.MNKnGlieh9R0/81bUt5nLc1gzS81Me5cLEPXmBy";
-  const PIN_ADMIN = "23504381";
-
-  // =========================================================
-  // CATÁLOGO DE PRODUCTOS DXN ECUADOR
-  // =========================================================
-  const productos = [
-    { id: 1, nombre: "Dxn Lingzhi Coffee 3 En 1", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
-    { id: 2, nombre: "Dxn Lingzhi Black Coffee", categoria: "bebidas", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
-    { id: 3, nombre: "Dxn White Coffee Zhino", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
-    { id: 4, nombre: "Dxn Cocozhi", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
-    { id: 5, nombre: "Dxn Zhi Mocha", categoria: "bebidas", cliente: 40.50, distribuidor: 28.50 },
-    { id: 6, nombre: "Dxn Lions Mane Lemon Matcha", categoria: "bebidas", cliente: 33.00, distribuidor: 21.00 },
-    { id: 7, nombre: "Dxn Non Dairy Creamer", categoria: "bebidas", cliente: 18.20, distribuidor: 6.20 },
-    { id: 8, nombre: "Dxn Zhi Roasted Coffee", categoria: "bebidas", cliente: 35.30, distribuidor: 23.30 },
-    { id: 9, nombre: "Dxn Spirulina Coffe", categoria: "bebidas", cliente: 37.00, distribuidor: 25.00 },
-    { id: 10, nombre: "Dxn Ootea Lingzhi Black Coffe Mix", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
-    { id: 11, nombre: "Dxn Lion Mane Coffee", categoria: "bebidas", cliente: 36.70, distribuidor: 24.70 },
-    { id: 12, nombre: "Dxn Spirulina Tablet 120s", categoria: "suplementos", cliente: 38.40, distribuidor: 26.40 },
-    { id: 13, nombre: "Dxn Spirulina Capsula 30s", categoria: "suplementos", cliente: 19.20, distribuidor: 7.20 },
-    { id: 14, nombre: "Dxn Morinzyme", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
-    { id: 15, nombre: "Dxn Morinzhi", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
-    { id: 16, nombre: "Dxn Roselle", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
-    { id: 17, nombre: "Dxn Ganozhi Pasta Dental", categoria: "cuidado", cliente: 18.80, distribuidor: 13.80 },
-    { id: 18, nombre: "Dxn Ganozhi Shampoo", categoria: "cuidado", cliente: 31.00, distribuidor: 26.00 },
-    { id: 19, nombre: "Dxn Ganozhi Gel De Baño", categoria: "cuidado", cliente: 38.00, distribuidor: 26.00 },
-    { id: 20, nombre: "Dxn Aceite De Masaje Gano", categoria: "cuidado", cliente: 28.90, distribuidor: 16.90 },
-    { id: 21, nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", cliente: 11.90, distribuidor: 6.90 }
-  ];
-
-  let cantidadesSeleccionadas = {};
-  let carrito = [];
-  let distribuidorValidado = false;
-  let nombreDistribuidorActivo = "";
-
-  document.addEventListener("DOMContentLoaded", () => {
-    productos.forEach(p => { cantidadesSeleccionadas[p.id] = 1; });
-    renderProductos(productos);
-  });
-
-  function renderProductos(lista) {
-    const grid = document.getElementById("gridProductos");
-    grid.innerHTML = "";
-    lista.forEach(p => {
-      const cant = cantidadesSeleccionadas[p.id] || 1;
-      const totalAcumulado = p.cliente * cant;
-
-      grid.innerHTML += `
-        <div class="product-card">
-          <div class="product-info">
-            <div class="product-title">${p.nombre}</div>
-            <div class="prices">
-              <div class="price-tag">Cliente <span>$${p.cliente.toFixed(2)}</span></div>
-              <div class="price-tag">Distribuidor <span>$${p.distribuidor.toFixed(2)}</span></div>
-            </div>
-          </div>
-          <div style="padding: 0 15px 15px;">
-            <div class="qty-control">
-              <button class="qty-btn" onclick="cambiarCantidad(${p.id}, -1)">-</button>
-              <span class="qty-val" id="qty-val-${p.id}">${cant}</span>
-              <button class="qty-btn" onclick="cambiarCantidad(${p.id}, 1)">+</button>
-            </div>
-            <div class="card-total-preview" id="preview-${p.id}">Subtotal: $${totalAcumulado.toFixed(2)}</div>
-            <button class="btn-add" onclick="agregarAlCarrito(${p.id})">🛒 Agregar al Carrito</button>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  function cambiarCantidad(id, cambio) {
-    let actual = cantidadesSeleccionadas[id] || 1;
-    actual += cambio;
-    if (actual < 1) actual = 1;
-    cantidadesSeleccionadas[id] = actual;
-
-    const elQty = document.getElementById(`qty-val-${id}`);
-    const elPrev = document.getElementById(`preview-${id}`);
-    const prod = productos.find(p => p.id === id);
-
-    if (elQty && elPrev && prod) {
-      elQty.innerText = actual;
-      const subtotal = prod.cliente * actual;
-      elPrev.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DXN Salud & Vida - Distribuidor Autorizado</title>
+  <style>
+    :root {
+      --primary: #cc0000;
+      --primary-dark: #990000;
+      --secondary: #0088cc;
+      --dark: #1a1a1a;
+      --light: #f4f6f9;
+      --white: #ffffff;
+      --gray: #666666;
+      --border: #e1e4e8;
     }
-  }
-
-  function filtrar(cat) {
-    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    if (cat === 'todos') {
-      renderProductos(productos);
-    } else {
-      renderProductos(productos.filter(p => p.categoria === cat));
-    }
-  }
-
-  function agregarAlCarrito(id) {
-    const prod = productos.find(p => p.id === id);
-    const cantElegida = cantidadesSeleccionadas[id] || 1;
-    const existe = carrito.find(item => item.id === id);
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--light); color: var(--dark); line-height: 1.6; padding-bottom: 80px; }
+    header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem; }
+    .logo-container { display: flex; align-items: center; gap: 10px; }
+    .logo-badge { background: var(--primary); color: white; font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 1.2rem; }
+    .logo-text h1 { font-size: 1.1rem; color: var(--dark); }
+    .logo-text p { font-size: 0.75rem; color: var(--gray); }
+    .nav-links { display: flex; gap: 20px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; font-size: 0.9rem; transition: 0.3s; }
+    .nav-links a:hover { color: var(--primary); }
+    .btn-ws { background: #25d366; color: white; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+    .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1200&q=80') center/cover; color: white; text-align: center; padding: 4rem 1rem; }
+    .hero h2 { font-size: 2rem; margin-bottom: 10px; }
+    .hero p { max-width: 600px; margin: 0 auto 20px; font-size: 0.95rem; opacity: 0.9; }
+    .container { max-width: 1200px; margin: -30px auto 40px; padding: 0 1rem; position: relative; z-index: 10; }
+    .card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+    .card-title { text-align: center; font-size: 1.2rem; margin-bottom: 15px; color: var(--dark); }
+    .search-box { display: flex; gap: 10px; max-width: 500px; margin: 0 auto 15px; }
+    .search-box input { flex: 1; padding: 12px 15px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 0.95rem; }
+    .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .btn:hover { background: var(--primary-dark); }
     
-    if (existe) {
-      existe.cantidad += cantElegida;
-    } else {
-      carrito.push({ ...prod, cantidad: cantElegida });
-    }
-    actualizarContadorCarrito();
-    cantidadesSeleccionadas[id] = 1;
-    cambiarCantidad(id, 0);
-  }
+    .qty-control { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; }
+    .qty-btn { background: #e0e0e0; border: none; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .qty-btn:hover { background: #ccc; }
+    .qty-val { font-weight: bold; font-size: 0.95rem; width: 20px; text-align: center; }
+    .card-total-preview { font-size: 0.85rem; color: var(--primary); font-weight: bold; text-align: center; margin-bottom: 8px; }
 
-  function actualizarContadorCarrito() {
-    const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-    document.getElementById("cartCount").innerText = totalItems;
-  }
+    .btn-add { background: var(--secondary); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+    .btn-add:hover { background: #006699; }
+    .checkbox-container { text-align: center; font-size: 0.8rem; color: var(--gray); margin-bottom: 15px; }
+    .result-box { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; display: none; }
+    .catalog-title { text-align: center; margin-bottom: 10px; font-size: 1.5rem; }
+    .catalog-subtitle { text-align: center; color: var(--gray); font-size: 0.85rem; margin-bottom: 20px; }
+    .categories { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+    .cat-btn { background: var(--white); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: 0.3s; }
+    .cat-btn.active, .cat-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .product-card { background: white; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .product-info { padding: 15px; }
+    .product-title { font-weight: bold; font-size: 1rem; margin-bottom: 8px; color: var(--dark); }
+    .prices { display: flex; justify-content: space-between; background: var(--light); padding: 10px; border-radius: 6px; margin-top: 10px; }
+    .price-tag { font-size: 0.8rem; }
+    .price-tag span { display: block; font-weight: bold; font-size: 0.95rem; color: var(--primary); }
 
-  function abrirCarrito() {
-    document.getElementById("modalCarrito").style.display = "flex";
-    cambiarTipoComprador();
-  }
+    .cart-floating-btn { position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; padding: 15px 20px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; z-index: 150; }
+    .cart-badge { background: white; color: var(--primary); border-radius: 50%; padding: 2px 8px; font-size: 0.85rem; }
 
-  function cerrarCarrito() {
-    document.getElementById("modalCarrito").style.display = "none";
-  }
+    footer { background: var(--dark); color: white; padding: 40px 1rem 20px; font-size: 0.85rem; margin-top: 50px; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; padding-bottom: 30px; border-bottom: 1px solid #333; }
+    .footer-bottom { max-width: 1200px; margin: 20px auto 0; display: flex; justify-content: space-between; align-items: center; color: #888; }
+    .admin-link { color: #888; text-decoration: none; cursor: pointer; }
+    
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 25px; border-radius: 10px; width: 90%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto; }
+    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 500; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 5px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .cart-item-btn { background: #ff4d4d; color: white; border: none; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
+    
+    .verify-box { background: var(--light); padding: 12px; border-radius: 6px; margin-bottom: 15px; border: 1px dashed var(--border); }
+    .admin-section { background: var(--light); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
+  </style>
+</head>
+<body>
 
-  function cambiarTipoComprador() {
-    const tipo = document.getElementById("tipoPrecio").value;
-    const secVerif = document.getElementById("secVerificacion");
+  <header>
+    <div class="nav-container">
+      <div class="logo-container">
+        <div class="logo-badge">DXN</div>
+        <div class="logo-text">
+          <h1>DXN Salud & Vida</h1>
+          <p>Distribuidor Autorizado</p>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#pv">Mis PV</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#ubicacion">Ubicación</a></li>
+      </ul>
+      <a href="https://wa.me/593990689086" target="_blank" class="btn-ws">💬 0990689086</a>
+    </div>
+  </header>
 
-    if (tipo === "distribuidor") {
-      secVerif.style.display = "block";
-      if (distribuidorValidado) {
-        document.getElementById("msgVerificacion").innerHTML = `<span style="color: green; font-weight: bold;">✔ Verificado: ${nombreDistribuidorActivo}</span>`;
-      }
-    } else {
-      secVerif.style.display = "none";
-    }
-    actualizarCarritoView();
-  }
+  <section class="hero" id="inicio">
+    <h2>DXN Salud, Bienestar & Libertad</h2>
+    <p>Descubre el poder del Ganoderma Lucidum y transforma tu estilo de vida con productos 100% orgánicos de la más alta calidad.</p>
+  </section>
 
-  // =========================================================
-  // GESTIÓN DE BASE DE DATOS (NUBE + LOCAL BACKUP)
-  // =========================================================
-  async function obtenerBaseDatos() {
-    let localDB = localStorage.getItem("dxn_db_backup");
-    let localObj = localDB ? JSON.parse(localDB) : { clientes: {}, distribuidores: {} };
+  <div class="container" id="pv">
+    <div class="card">
+      <h3 class="card-title">Consultar Mis Puntos de Volumen (PV)</h3>
+      <div class="search-box">
+        <input type="text" id="inputCedula" placeholder="Ingresa tu número de cédula, código o nombre...">
+        <button class="btn" onclick="buscarPV()">Consultar mis PV</button>
+      </div>
+      <div class="checkbox-container">
+        <label><input type="checkbox" id="checkConfirm"> Confirmo que consulto mi propia información.</label>
+      </div>
+      <div class="result-box" id="resultadoPV"></div>
+    </div>
 
-    try {
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
-        headers: { 'X-Master-Key': JSONBIN_KEY }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        let cloudRecord = data.record || {};
+    <div id="catalogo">
+      <h2 class="catalog-title">Catálogo de Productos DXN Ecuador</h2>
+      <p class="catalog-subtitle">Precios oficiales de venta al público y para distribuidores afiliados</p>
+      
+      <div class="categories">
+        <button class="cat-btn active" onclick="filtrar('todos')">Todos</button>
+        <button class="cat-btn" onclick="filtrar('bebidas')">Bebidas & Cafés</button>
+        <button class="cat-btn" onclick="filtrar('suplementos')">Suplementos</button>
+        <button class="cat-btn" onclick="filtrar('cuidado')">Cuidado Personal</button>
+      </div>
+
+      <div class="products-grid" id="gridProductos"></div>
+    </div>
+  </div>
+
+  <div class="cart-floating-btn" onclick="abrirCarrito()">
+    🛒 Carrito <span class="cart-badge" id="cartCount">0</span>
+  </div>
+
+  <div class="modal" id="modalCarrito">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarCarrito()">&times;</span>
+      <h3 style="margin-bottom: 15px;">Tu Carrito de Compras</h3>
+      
+      <div class="form-group">
+        <label>Tipo de Comprador:</label>
+        <select id="tipoPrecio" onchange="cambiarTipoComprador()">
+          <option value="cliente">Cliente Final (Público)</option>
+          <option value="distribuidor">Distribuidor Afiliado</option>
+        </select>
+      </div>
+
+      <div class="verify-box" id="secVerificacion" style="display: none;">
+        <label style="font-size: 0.85rem; font-weight: bold;">Código de Distribuidor:</label>
+        <div style="display: flex; gap: 5px; margin-top: 5px;">
+          <input type="text" id="codigoDistribuidor" placeholder="Ej: 818629644" style="padding: 8px; font-size: 0.9rem; flex: 1; border: 1px solid var(--border); border-radius: 5px;">
+          <button class="btn" style="padding: 8px 12px; font-size: 0.85rem;" onclick="validarCodigoDistribuidor()">Verificar</button>
+        </div>
+        <div id="msgVerificacion" style="font-size: 0.8rem; margin-top: 5px;"></div>
+      </div>
+
+      <div id="cartItemsContainer" style="margin-bottom: 15px;"></div>
+
+      <div style="font-size: 1.1rem; font-weight: bold; text-align: right; margin-bottom: 15px;">
+        Total: $<span id="cartTotal">0.00</span>
+      </div>
+
+      <button class="btn" style="width: 100%; background: #25d366;" onclick="enviarPedidoWhatsApp()">
+        📲 Pedir por WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <footer id="ubicacion">
+    <div class="footer-grid">
+      <div>
+        <h3>DXN Salud & Vida</h3>
+        <p style="margin-top: 10px; color: #aaa;">Distribución autorizada de productos de salud, nutrición y cuidado personal orgánico.</p>
+      </div>
+      <div>
+        <h3>Atención al Cliente</h3>
+        <p style="margin-top: 10px; color: #aaa;">WhatsApp: 0990689086</p>
+        <p style="color: #aaa;">Calle Salustio Giller y Av. Esperanza, junto a Comercial Don Diego.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 DXN Salud & Vida - Todos los derechos reservados.</p>
+      <span class="admin-link" onclick="abrirAdmin()">⚙️ Acceso Administrador</span>
+    </div>
+  </footer>
+
+  <div class="modal" id="modalAdmin">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarAdmin()">&times;</span>
+      <h3 style="margin-bottom: 15px;">Panel Administrador</h3>
+      
+      <div id="loginSection">
+        <div class="form-group">
+          <label>PIN de Administrador</label>
+          <input type="password" id="pinInput" placeholder="Ingresa el PIN">
+        </div>
+        <button class="btn" style="width: 100%;" onclick="loginAdmin()">Ingresar</button>
+      </div>
+      
+      <div id="adminPanelSection" style="display: none;">
         
-        // Fusión de datos (Local + Nube)
-        let mergedDB = {
-          clientes: { ...(cloudRecord.clientes || {}), ...(localObj.clientes || {}) },
-          distribuidores: { ...(cloudRecord.distribuidores || {}), ...(localObj.distribuidores || {}) }
-        };
+        <div class="admin-section">
+          <h4 style="margin-bottom: 10px; color: #28a745;">🔍 Consultar Afiliado o Cliente</h4>
+          <div class="form-group">
+            <label>Cédula, Código de Distribuidor o Nombre:</label>
+            <div style="display: flex; gap: 5px;">
+              <input type="text" id="adminSearchInput" placeholder="Ej: 818629644">
+              <button class="btn" style="background: #28a745; padding: 10px 15px;" onclick="adminBuscarAfiliado()">Buscar</button>
+            </div>
+          </div>
+          <div id="adminSearchResult" style="font-size: 0.85rem; margin-top: 10px;"></div>
+          <button class="btn" style="width: 100%; background: #6c757d; margin-top: 10px; font-size: 0.8rem; padding: 6px;" onclick="adminVerTodos()">📋 Ver Lista Completa</button>
+        </div>
 
-        // Guardar copia local sincronizada
-        localStorage.setItem("dxn_db_backup", JSON.stringify(mergedDB));
-        return mergedDB;
-      }
-    } catch (err) {
-      console.warn("Modo Offline / Usando datos locales:", err);
+        <div class="admin-section">
+          <h4 style="margin-bottom: 10px; color: var(--primary);">1. Registrar Puntos PV</h4>
+          <div class="form-group">
+            <label>Cédula o Código</label>
+            <input type="text" id="regCedula">
+          </div>
+          <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" id="regNombre">
+          </div>
+          <div class="form-group">
+            <label>Puntos de Volumen (PV)</label>
+            <input type="number" step="0.01" id="regPV">
+          </div>
+          <button class="btn" style="width: 100%;" onclick="guardarCliente()">Guardar PV</button>
+        </div>
+
+        <div class="admin-section">
+          <h4 style="margin-bottom: 10px; color: var(--secondary);">2. Registrar Distribuidor Afiliado</h4>
+          <div class="form-group">
+            <label>Código de Distribuidor</label>
+            <input type="text" id="regCodDistribuidor">
+          </div>
+          <div class="form-group">
+            <label>Nombre del Distribuidor</label>
+            <input type="text" id="regNombreDistribuidor">
+          </div>
+          <button class="btn" style="width: 100%; background: var(--secondary);" onclick="guardarDistribuidor()">Guardar Distribuidor</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const JSONBIN_ID = "6ac68df3ffd5d1605356df4f";
+    const JSONBIN_KEY = "$2a$10$4srvcRSSt6sEm.MNKnGlieh9R0/81bUt5nLc1gzS81Me5cLEPXmBy";
+    const PIN_ADMIN = "23504381";
+
+    const productos = [
+      { id: 1, nombre: "Dxn Lingzhi Coffee 3 En 1", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
+      { id: 2, nombre: "Dxn Lingzhi Black Coffee", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
+      { id: 3, nombre: "Dxn White Coffee Zhino", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
+      { id: 4, nombre: "Dxn Cocozhi", categoria: "bebidas", cliente: 41.80, distribuidor: 29.80 },
+      { id: 5, nombre: "Dxn Zhi Mocha", categoria: "bebidas", cliente: 40.50, distribuidor: 28.50 },
+      { id: 6, nombre: "Dxn Lions Mane Lemon Matcha", categoria: "bebidas", cliente: 33.00, distribuidor: 21.00 },
+      { id: 7, nombre: "Dxn Non Dairy Creamer", categoria: "bebidas", cliente: 18.20, distribuidor: 6.20 },
+      { id: 8, nombre: "Dxn Zhi Roasted Coffee", categoria: "bebidas", cliente: 35.30, distribuidor: 23.30 },
+      { id: 9, nombre: "Dxn Spirulina Coffe", categoria: "bebidas", cliente: 37.00, distribuidor: 25.00 },
+      { id: 10, nombre: "Dxn Ootea Lingzhi Black Coffe Mix", categoria: "bebidas", cliente: 36.60, distribuidor: 24.60 },
+      { id: 11, nombre: "Dxn Lion Mane Coffee", categoria: "bebidas", cliente: 36.70, distribuidor: 24.70 },
+      { id: 12, nombre: "Dxn Spirulina Tablet 120s", categoria: "suplementos", cliente: 38.40, distribuidor: 26.40 },
+      { id: 13, nombre: "Dxn Spirulina Capsula 30s", categoria: "suplementos", cliente: 19.20, distribuidor: 7.20 },
+      { id: 14, nombre: "Dxn Morinzyme", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
+      { id: 15, nombre: "Dxn Morinzhi", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
+      { id: 16, nombre: "Dxn Roselle", categoria: "suplementos", cliente: 38.30, distribuidor: 26.30 },
+      { id: 17, nombre: "Dxn Ganozhi Pasta Dental", categoria: "cuidado", cliente: 18.80, distribuidor: 13.80 },
+      { id: 18, nombre: "Dxn Ganozhi Shampoo", categoria: "cuidado", cliente: 31.00, distribuidor: 26.00 },
+      { id: 19, nombre: "Dxn Ganozhi Gel De Baño", categoria: "cuidado", cliente: 38.00, distribuidor: 26.00 },
+      { id: 20, nombre: "Dxn Aceite De Masaje Gano", categoria: "cuidado", cliente: 28.90, distribuidor: 16.90 },
+      { id: 21, nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", cliente: 11.90, distribuidor: 6.90 }
+    ];
+
+    let cantidadesSeleccionadas = {};
+    let carrito = [];
+    let distribuidorValidado = false;
+    let nombreDistribuidorActivo = "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      productos.forEach(p => { cantidadesSeleccionadas[p.id] = 1; });
+      renderProductos(productos);
+    });
+
+    function renderProductos(lista) {
+      const grid = document.getElementById("gridProductos");
+      grid.innerHTML = "";
+      lista.forEach(p => {
+        const cant = cantidadesSeleccionadas[p.id] || 1;
+        const totalAcumulado = p.cliente * cant;
+
+        grid.innerHTML += `
+          <div class="product-card">
+            <div class="product-info">
+              <div class="product-title">${p.nombre}</div>
+              <div class="prices">
+                <div class="price-tag">Cliente <span>$${p.cliente.toFixed(2)}</span></div>
+                <div class="price-tag">Distribuidor <span>$${p.distribuidor.toFixed(2)}</span></div>
+              </div>
+            </div>
+            <div style="padding: 0 15px 15px;">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="cambiarCantidad(${p.id}, -1)">-</button>
+                <span class="qty-val" id="qty-val-${p.id}">${cant}</span>
+                <button class="qty-btn" onclick="cambiarCantidad(${p.id}, 1)">+</button>
+              </div>
+              <div class="card-total-preview" id="preview-${p.id}">Subtotal: $${totalAcumulado.toFixed(2)}</div>
+              <button class="btn-add" onclick="agregarAlCarrito(${p.id})">🛒 Agregar al Carrito</button>
+            </div>
+          </div>
+        `;
+      });
     }
 
-    return localObj;
-  }
+    function cambiarCantidad(id, cambio) {
+      let actual = cantidadesSeleccionadas[id] || 1;
+      actual += cambio;
+      if (actual < 1) actual = 1;
+      cantidadesSeleccionadas[id] = actual;
 
-  async function guardarEnNubeYLocal(dbActualizada) {
-    // 1. Guardado inmediato en LocalStorage
-    localStorage.setItem("dxn_db_backup", JSON.stringify(dbActualizada));
+      const elQty = document.getElementById(`qty-val-${id}`);
+      const elPrev = document.getElementById(`preview-${id}`);
+      const prod = productos.find(p => p.id === id);
 
-    // 2. Envío a la nube
-    try {
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': JSONBIN_KEY
-        },
-        body: JSON.stringify(dbActualizada)
+      if (elQty && elPrev && prod) {
+        elQty.innerText = actual;
+        const subtotal = prod.cliente * actual;
+        elPrev.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
+      }
+    }
+
+    function filtrar(cat) {
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      if (cat === 'todos') {
+        renderProductos(productos);
+      } else {
+        renderProductos(productos.filter(p => p.categoria === cat));
+      }
+    }
+
+    function agregarAlCarrito(id) {
+      const prod = productos.find(p => p.id === id);
+      const cantElegida = cantidadesSeleccionadas[id] || 1;
+      const existe = carrito.find(item => item.id === id);
+      
+      if (existe) {
+        existe.cantidad += cantElegida;
+      } else {
+        carrito.push({ ...prod, cantidad: cantElegida });
+      }
+      actualizarContadorCarrito();
+      cantidadesSeleccionadas[id] = 1;
+      cambiarCantidad(id, 0);
+    }
+
+    function actualizarContadorCarrito() {
+      const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+      document.getElementById("cartCount").innerText = totalItems;
+    }
+
+    function abrirCarrito() {
+      document.getElementById("modalCarrito").style.display = "flex";
+      cambiarTipoComprador();
+    }
+
+    function cerrarCarrito() {
+      document.getElementById("modalCarrito").style.display = "none";
+    }
+
+    function cambiarTipoComprador() {
+      const tipo = document.getElementById("tipoPrecio").value;
+      const secVerif = document.getElementById("secVerificacion");
+
+      if (tipo === "distribuidor") {
+        secVerif.style.display = "block";
+        if (distribuidorValidado) {
+          document.getElementById("msgVerificacion").innerHTML = `<span style="color: green; font-weight: bold;">✔ Verificado: ${nombreDistribuidorActivo}</span>`;
+        }
+      } else {
+        secVerif.style.display = "none";
+      }
+      actualizarCarritoView();
+    }
+
+    async function obtenerBaseDatos() {
+      let localDB = localStorage.getItem("dxn_db_backup");
+      let localObj = localDB ? JSON.parse(localDB) : { clientes: {}, distribuidores: {} };
+
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+          headers: { 'X-Master-Key': JSONBIN_KEY }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          let cloudRecord = data.record || {};
+          let mergedDB = {
+            clientes: { ...(cloudRecord.clientes || {}), ...(localObj.clientes || {}) },
+            distribuidores: { ...(cloudRecord.distribuidores || {}), ...(localObj.distribuidores || {}) }
+          };
+          localStorage.setItem("dxn_db_backup", JSON.stringify(mergedDB));
+          return mergedDB;
+        }
+      } catch (err) {
+        console.warn("Usando backup local");
+      }
+      return localObj;
+    }
+
+    async function guardarEnNubeYLocal(dbActualizada) {
+      localStorage.setItem("dxn_db_backup", JSON.stringify(dbActualizada));
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_KEY
+          },
+          body: JSON.stringify(dbActualizada)
+        });
+        return res.ok;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    async function validarCodigoDistribuidor() {
+      const inputVal = document.getElementById("codigoDistribuidor").value.trim();
+      const msgBox = document.getElementById("msgVerificacion");
+
+      if (!inputVal) {
+        msgBox.innerHTML = "<span style='color: red;'>Ingresa un código.</span>";
+        return;
+      }
+
+      msgBox.innerHTML = "<span style='color: #666;'>Verificando...</span>";
+
+      const db = await obtenerBaseDatos();
+      const distribuidores = db.distribuidores || {};
+      const codBuscado = inputVal.replace(/\s+/g, '').toLowerCase();
+
+      let llaveEncontrada = Object.keys(distribuidores).find(
+        key => key.toString().replace(/\s+/g, '').toLowerCase() === codBuscado
+      );
+
+      if (llaveEncontrada) {
+        distribuidorValidado = true;
+        nombreDistribuidorActivo = distribuidores[llaveEncontrada];
+        msgBox.innerHTML = `<span style="color: green; font-weight: bold;">✔ Válido: ${nombreDistribuidorActivo}</span>`;
+      } else {
+        distribuidorValidado = false;
+        nombreDistribuidorActivo = "";
+        msgBox.innerHTML = `<span style="color: red;">❌ Código (${inputVal}) no registrado.</span>`;
+      }
+
+      actualizarCarritoView();
+    }
+
+    function actualizarCarritoView() {
+      const container = document.getElementById("cartItemsContainer");
+      const tipo = document.getElementById("tipoPrecio").value;
+      const esDistribuidorValido = (tipo === "distribuidor" && distribuidorValidado);
+      
+      container.innerHTML = "";
+
+      if (carrito.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#888;'>El carrito está vacío.</p>";
+        document.getElementById("cartTotal").innerText = "0.00";
+        return;
+      }
+
+      let total = 0;
+      carrito.forEach((item, index) => {
+        const precioUnitario = esDistribuidorValido ? item.distribuidor : item.cliente;
+        const subtotal = precioUnitario * item.cantidad;
+        total += subtotal;
+
+        container.innerHTML += `
+          <div class="cart-item">
+            <div>
+              <strong>${item.nombre}</strong><br>
+              <small>Cant: ${item.cantidad} x $${precioUnitario.toFixed(2)}</small>
+            </div>
+            <div>
+              <span style="font-weight:bold; margin-right:10px;">$${subtotal.toFixed(2)}</span>
+              <button class="cart-item-btn" onclick="eliminarDelCarrito(${index})">✕</button>
+            </div>
+          </div>
+        `;
       });
 
-      return res.ok;
-    } catch (err) {
-      console.error("Error al sincronizar con la nube:", err);
-      return false;
-    }
-  }
-
-  // =========================================================
-  // VALIDACIÓN DE DISTRIBUIDOR EN CARRITO
-  // =========================================================
-  async function validarCodigoDistribuidor() {
-    const inputVal = document.getElementById("codigoDistribuidor").value.trim();
-    const msgBox = document.getElementById("msgVerificacion");
-
-    if (!inputVal) {
-      msgBox.innerHTML = "<span style='color: red;'>Ingresa un código.</span>";
-      return;
+      document.getElementById("cartTotal").innerText = total.toFixed(2);
     }
 
-    msgBox.innerHTML = "<span style='color: #666;'>Verificando...</span>";
-
-    const db = await obtenerBaseDatos();
-    const distribuidores = db.distribuidores || {};
-
-    // Normalizar texto eliminando espacios y convirtiendo a minúsculas
-    const codBuscado = inputVal.replace(/\s+/g, '').toLowerCase();
-
-    let llaveEncontrada = Object.keys(distribuidores).find(
-      key => key.toString().replace(/\s+/g, '').toLowerCase() === codBuscado
-    );
-
-    if (llaveEncontrada) {
-      distribuidorValidado = true;
-      nombreDistribuidorActivo = distribuidores[llaveEncontrada];
-      msgBox.innerHTML = `<span style="color: green; font-weight: bold;">✔ Válido: ${nombreDistribuidorActivo}</span>`;
-    } else {
-      distribuidorValidado = false;
-      nombreDistribuidorActivo = "";
-      msgBox.innerHTML = `<span style="color: red;">❌ Código (${inputVal}) no registrado.</span>`;
+    function eliminarDelCarrito(index) {
+      carrito.splice(index, 1);
+      actualizarContadorCarrito();
+      actualizarCarritoView();
     }
 
-    actualizarCarritoView();
-  }
-
-  function actualizarCarritoView() {
-    const container = document.getElementById("cartItemsContainer");
-    const tipo = document.getElementById("tipoPrecio").value;
-    const esDistribuidorValido = (tipo === "distribuidor" && distribuidorValidado);
-    
-    container.innerHTML = "";
-
-    if (carrito.length === 0) {
-      container.innerHTML = "<p style='text-align:center; color:#888;'>El carrito está vacío.</p>";
-      document.getElementById("cartTotal").innerText = "0.00";
-      return;
-    }
-
-    let total = 0;
-    carrito.forEach((item, index) => {
-      const precioUnitario = esDistribuidorValido ? item.distribuidor : item.cliente;
-      const subtotal = precioUnitario * item.cantidad;
-      total += subtotal;
-
-      container.innerHTML += `
-        <div class="cart-item">
-          <div>
-            <strong>${item.nombre}</strong><br>
-            <small>Cant: ${item.cantidad} x $${precioUnitario.toFixed(2)}</small>
-          </div>
-          <div>
-            <span style="font-weight:bold; margin-right:10px;">$${subtotal.toFixed(2)}</span>
-            <button class="cart-item-btn" onclick="eliminarDelCarrito(${index})">✕</button>
-          </div>
-        </div>
-      `;
-    });
-
-    document.getElementById("cartTotal").innerText = total.toFixed(2);
-  }
-
-  function eliminarDelCarrito(index) {
-    carrito.splice(index, 1);
-    actualizarContadorCarrito();
-    actualizarCarritoView();
-  }
-
-  function enviarPedidoWhatsApp() {
-    if (carrito.length === 0) {
-      alert("Tu carrito está vacío.");
-      return;
-    }
-
-    const tipo = document.getElementById("tipoPrecio").value;
-
-    if (tipo === "distribuidor" && !distribuidorValidado) {
-      alert("Debes ingresar un código válido de distribuidor.");
-      return;
-    }
-
-    const tipoTexto = tipo === "distribuidor" ? `Distribuidor Afiliado (${nombreDistribuidorActivo})` : "Cliente Final";
-    let mensaje = `Hola DXN Salud & Vida, deseo realizar el siguiente pedido como *${tipoTexto}*:\n\n`;
-
-    let total = 0;
-    carrito.forEach(item => {
-      const precioUnitario = (tipo === "distribuidor" && distribuidorValidado) ? item.distribuidor : item.cliente;
-      const subtotal = precioUnitario * item.cantidad;
-      total += subtotal;
-      mensaje += `• *${item.cantidad}x* ${item.nombre} ($${subtotal.toFixed(2)})\n`;
-    });
-
-    mensaje += `\n*Total a pagar:* $${total.toFixed(2)}\n\n¿Me indican los datos para concretar el pago y envío?`;
-
-    window.open(`https://wa.me/593990689086?text=${encodeURIComponent(mensaje)}`, '_blank');
-  }
-
-  // =========================================================
-  // BÚSQUEDA PÚBLICA DE PUNTOS PV
-  // =========================================================
-  async function buscarPV() {
-    const query = document.getElementById("inputCedula").value.trim().toLowerCase();
-    const check = document.getElementById("checkConfirm").checked;
-    const resBox = document.getElementById("resultadoPV");
-
-    if (!query) {
-      alert("Ingresa un número de cédula, código o nombre.");
-      return;
-    }
-    if (!check) {
-      alert("Debes confirmar que consultas tu propia información.");
-      return;
-    }
-
-    resBox.style.display = "block";
-    resBox.innerHTML = "<p>Buscando...</p>";
-
-    const db = await obtenerBaseDatos();
-    const clientes = db.clientes || {};
-
-    let html = "";
-    let encontrado = false;
-
-    Object.keys(clientes).forEach(ced => {
-      const c = clientes[ced];
-      const nom = c.nombre ? c.nombre.toLowerCase() : "";
-      if (ced.toLowerCase() === query || nom.includes(query)) {
-        encontrado = true;
-        html += `
-          <h4 style="color: var(--primary);">¡Hola, ${c.nombre}!</h4>
-          <p style="font-size: 1.1rem; margin-top: 5px;">Tienes un total acumulado de: <strong>${c.pv} PV</strong></p>
-        `;
+    function enviarPedidoWhatsApp() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
       }
-    });
 
-    if (!encontrado) {
-      resBox.innerHTML = `<p style="color: #c00;">No se encontró información de PV para "${query}".</p>`;
-    } else {
+      const tipo = document.getElementById("tipoPrecio").value;
+
+      if (tipo === "distribuidor" && !distribuidorValidado) {
+        alert("Debes ingresar un código válido de distribuidor.");
+        return;
+      }
+
+      const tipoTexto = tipo === "distribuidor" ? `Distribuidor Afiliado (${nombreDistribuidorActivo})` : "Cliente Final";
+      let mensaje = `Hola DXN Salud & Vida, deseo realizar el siguiente pedido como *${tipoTexto}*:\n\n`;
+
+      let total = 0;
+      carrito.forEach(item => {
+        const precioUnitario = (tipo === "distribuidor" && distribuidorValidado) ? item.distribuidor : item.cliente;
+        const subtotal = precioUnitario * item.cantidad;
+        total += subtotal;
+        mensaje += `• *${item.cantidad}x* ${item.nombre} ($${subtotal.toFixed(2)})\n`;
+      });
+
+      mensaje += `\n*Total a pagar:* $${total.toFixed(2)}\n\n¿Me indican los datos para concretar el pago y envío?`;
+
+      window.open(`https://wa.me/593990689086?text=${encodeURIComponent(mensaje)}`, '_blank');
+    }
+
+    async function buscarPV() {
+      const query = document.getElementById("inputCedula").value.trim().toLowerCase();
+      const check = document.getElementById("checkConfirm").checked;
+      const resBox = document.getElementById("resultadoPV");
+
+      if (!query) {
+        alert("Ingresa un número de cédula, código o nombre.");
+        return;
+      }
+      if (!check) {
+        alert("Debes confirmar que consultas tu propia información.");
+        return;
+      }
+
+      resBox.style.display = "block";
+      resBox.innerHTML = "<p>Buscando...</p>";
+
+      const db = await obtenerBaseDatos();
+      const clientes = db.clientes || {};
+
+      let html = "";
+      let encontrado = false;
+
+      Object.keys(clientes).forEach(ced => {
+        const c = clientes[ced];
+        const nom = c.nombre ? c.nombre.toLowerCase() : "";
+        if (ced.toLowerCase() === query || nom.includes(query)) {
+          encontrado = true;
+          html += `
+            <h4 style="color: var(--primary);">¡Hola, ${c.nombre}!</h4>
+            <p style="font-size: 1.1rem; margin-top: 5px;">Tienes un total acumulado de: <strong>${c.pv} PV</strong></p>
+          `;
+        }
+      });
+
+      if (!encontrado) {
+        resBox.innerHTML = `<p style="color: #c00;">No se encontró información de PV para "${query}".</p>`;
+      } else {
+        resBox.innerHTML = html;
+      }
+    }
+
+    function abrirAdmin() { document.getElementById("modalAdmin").style.display = "flex"; }
+    function cerrarAdmin() { document.getElementById("modalAdmin").style.display = "none"; }
+    function loginAdmin() {
+      if (document.getElementById("pinInput").value === PIN_ADMIN) {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("adminPanelSection").style.display = "block";
+      } else {
+        alert("PIN Incorrecto.");
+      }
+    }
+
+    async function adminBuscarAfiliado() {
+      const query = document.getElementById("adminSearchInput").value.trim().toLowerCase();
+      const resBox = document.getElementById("adminSearchResult");
+      if (!query) return;
+
+      resBox.innerHTML = "<span>Buscando...</span>";
+      const db = await obtenerBaseDatos();
+      const clientes = db.clientes || {};
+      const distribuidores = db.distribuidores || {};
+
+      let html = "";
+      let encontrado = false;
+
+      Object.keys(distribuidores).forEach(cod => {
+        if (cod.toLowerCase().includes(query) || distribuidores[cod].toLowerCase().includes(query)) {
+          encontrado = true;
+          html += `<div style="background:#e8f4ea; padding:8px; border-radius:5px; margin-bottom:5px;">
+            <strong>⭐ Distribuidor:</strong> ${cod} - ${distribuidores[cod]}
+          </div>`;
+        }
+      });
+
+      Object.keys(clientes).forEach(ced => {
+        if (ced.toLowerCase().includes(query) || (clientes[ced].nombre && clientes[ced].nombre.toLowerCase().includes(query))) {
+          encontrado = true;
+          html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px; margin-bottom:5px;">
+            <strong>📊 Puntos PV:</strong> ${ced} - ${clientes[ced].nombre} (${clientes[ced].pv} PV)
+          </div>`;
+        }
+      });
+
+      resBox.innerHTML = encontrado ? html : `<span style="color:red;">No hay registros coincidentes.</span>`;
+    }
+
+    async function adminVerTodos() {
+      const resBox = document.getElementById("adminSearchResult");
+      resBox.innerHTML = "<span>Cargando...</span>";
+      const db = await obtenerBaseDatos();
+      
+      let html = "<div style='max-height: 180px; overflow-y: auto; text-align: left; background: white; padding: 10px; border: 1px solid var(--border); border-radius: 5px;'>";
+      html += "<strong>⭐ DISTRIBUIDORES:</strong><br>";
+      Object.keys(db.distribuidores || {}).forEach(cod => {
+        html += `<small>• <strong>${cod}</strong> - ${db.distribuidores[cod]}</small><br>`;
+      });
+      html += "<br><strong>📊 PUNTOS PV:</strong><br>";
+      Object.keys(db.clientes || {}).forEach(ced => {
+        html += `<small>• <strong>${ced}</strong> - ${db.clientes[ced].nombre} (${db.clientes[ced].pv} PV)</small><br>`;
+      });
+      html += "</div>";
       resBox.innerHTML = html;
     }
-  }
 
-  // =========================================================
-  // ADMINISTRACIÓN (REGISTROS Y CONSULTA)
-  // =========================================================
-  function abrirAdmin() {
-    document.getElementById("modalAdmin").style.display = "flex";
-  }
-  function cerrarAdmin() {
-    document.getElementById("modalAdmin").style.display = "none";
-  }
-  function loginAdmin() {
-    const pin = document.getElementById("pinInput").value;
-    if (pin === PIN_ADMIN) {
-      document.getElementById("loginSection").style.display = "none";
-      document.getElementById("adminPanelSection").style.display = "block";
-    } else {
-      alert("PIN Incorrecto.");
-    }
-  }
+    async function guardarCliente() {
+      const cedula = document.getElementById("regCedula").value.trim();
+      const nombre = document.getElementById("regNombre").value.trim();
+      const pv = parseFloat(document.getElementById("regPV").value);
 
-  async function adminBuscarAfiliado() {
-    const query = document.getElementById("adminSearchInput").value.trim().toLowerCase();
-    const resBox = document.getElementById("adminSearchResult");
+      if (!cedula || !nombre || isNaN(pv)) return alert("Completa los campos.");
 
-    if (!query) {
-      resBox.innerHTML = "<span style='color:red;'>Ingresa término de búsqueda.</span>";
-      return;
+      const db = await obtenerBaseDatos();
+      db.clientes[cedula] = { nombre: nombre, pv: pv };
+      await guardarEnNubeYLocal(db);
+      alert("¡Registro guardado!");
+      document.getElementById("regCedula").value = "";
+      document.getElementById("regNombre").value = "";
+      document.getElementById("regPV").value = "";
     }
 
-    resBox.innerHTML = "<span>Buscando...</span>";
-    const db = await obtenerBaseDatos();
-    const clientes = db.clientes || {};
-    const distribuidores = db.distribuidores || {};
+    async function guardarDistribuidor() {
+      const cod = document.getElementById("regCodDistribuidor").value.trim();
+      const nombre = document.getElementById("regNombreDistribuidor").value.trim();
 
-    let html = "";
-    let encontrado = false;
+      if (!cod || !nombre) return alert("Completa los campos.");
 
-    Object.keys(distribuidores).forEach(cod => {
-      const nombre = distribuidores[cod].toLowerCase();
-      if (cod.toLowerCase().includes(query) || nombre.includes(query)) {
-        encontrado = true;
-        html += `<div style="background:#e8f4ea; padding:8px; border-radius:5px; margin-bottom:5px;">
-          <strong>⭐ Distribuidor Afiliado:</strong><br>
-          Código: ${cod}<br>
-          Nombre: ${distribuidores[cod]}
-        </div>`;
-      }
-    });
-
-    Object.keys(clientes).forEach(ced => {
-      const c = clientes[ced];
-      const nombre = c.nombre ? c.nombre.toLowerCase() : "";
-      if (ced.toLowerCase().includes(query) || nombre.includes(query)) {
-        encontrado = true;
-        html += `<div style="background:#e8f0fe; padding:8px; border-radius:5px; margin-bottom:5px;">
-          <strong>📊 Registro de PV:</strong><br>
-          ID: ${ced}<br>
-          Nombre: ${c.nombre}<br>
-          PV: <strong>${c.pv} PV</strong>
-        </div>`;
-      }
-    });
-
-    if (!encontrado) {
-      html = `<span style="color:red;">No hay registros coincidentes.</span>`;
+      const db = await obtenerBaseDatos();
+      db.distribuidores[cod] = nombre;
+      await guardarEnNubeYLocal(db);
+      alert("¡Distribuidor registrado!");
+      document.getElementById("regCodDistribuidor").value = "";
+      document.getElementById("regNombreDistribuidor").value = "";
     }
-
-    resBox.innerHTML = html;
-  }
-
-  async function adminVerTodos() {
-    const resBox = document.getElementById("adminSearchResult");
-    resBox.innerHTML = "<span>Cargando lista...</span>";
-
-    const db = await obtenerBaseDatos();
-    const clientes = db.clientes || {};
-    const distribuidores = db.distribuidores || {};
-
-    let html = "<div style='max-height: 180px; overflow-y: auto; text-align: left; background: white; padding: 10px; border: 1px solid var(--border); border-radius: 5px;'>";
-    
-    html += "<strong>⭐ DISTRIBUIDORES AFILIADOS:</strong><br>";
-    const listDist = Object.keys(distribuidores);
-    if (listDist.length === 0) {
-      html += "<small style='color:#888;'>Sin distribuidores.</small><br>";
-    } else {
-      listDist.forEach(cod => {
-        html += `<small>• <strong>${cod}</strong> - ${distribuidores[cod]}</small><br>`;
-      });
-    }
-
-    html += "<br><strong>📊 REGISTROS DE PV:</strong><br>";
-    const listCli = Object.keys(clientes);
-    if (listCli.length === 0) {
-      html += "<small style='color:#888;'>Sin registros PV.</small><br>";
-    } else {
-      listCli.forEach(ced => {
-        html += `<small>• <strong>${ced}</strong> - ${clientes[ced].nombre} (${clientes[ced].pv} PV)</small><br>`;
-      });
-    }
-
-    html += "</div>";
-    resBox.innerHTML = html;
-  }
-
-  async function guardarCliente() {
-    const cedula = document.getElementById("regCedula").value.trim();
-    const nombre = document.getElementById("regNombre").value.trim();
-    const pv = parseFloat(document.getElementById("regPV").value);
-
-    if (!cedula || !nombre || isNaN(pv)) {
-      alert("Completa todos los campos correctamente.");
-      return;
-    }
-
-    const db = await obtenerBaseDatos();
-    db.clientes[cedula] = { nombre: nombre, pv: pv };
-
-    const ok = await guardarEnNubeYLocal(db);
-    alert(ok ? "¡Puntos PV guardados y sincronizados con éxito!" : "¡Guardado localmente! (Sincronización remota pendiente)");
-
-    document.getElementById("regCedula").value = "";
-    document.getElementById("regNombre").value = "";
-    document.getElementById("regPV").value = "";
-  }
-
-  async function guardarDistribuidor() {
-    const cod = document.getElementById("regCodDistribuidor").value.trim();
-    const nombre = document.getElementById("regNombreDistribuidor").value.trim();
-
-    if (!cod || !nombre) {
-      alert("Ingresa código y nombre del distribuidor.");
-      return;
-    }
-
-    const db = await obtenerBaseDatos();
-    db.distribuidores[cod] = nombre;
-
-    const ok = await guardarEnNubeYLocal(db);
-    alert(ok ? "¡Distribuidor guardado y sincronizado con éxito!" : "¡Guardado localmente! (Sincronización remota pendiente)");
-
-    document.getElementById("regCodDistribuidor").value = "";
-    document.getElementById("regNombreDistribuidor").value = "";
-  }
-</script>
+  </script>
+</body>
+</html>
