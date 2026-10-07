@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DXN Salud & Vida - Distribuidor Autorizado</title>
-    <!-- Fuente Moderna Google Fonts -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -41,9 +41,9 @@
             line-height: 1.6;
         }
 
-        /* --- Header & Navegación --- */
+        /* --- Header --- */
         header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-sm);
             position: sticky;
@@ -64,26 +64,27 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
         }
 
         .logo-icon {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), #e53e3e);
             color: white;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 1.2rem;
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
         }
 
         .logo-text h1 {
             color: var(--dark);
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
             line-height: 1.1;
         }
@@ -91,7 +92,7 @@
         .logo-text span {
             color: var(--secondary);
             font-size: 0.78rem;
-            font-weight: 500;
+            font-weight: 600;
             display: block;
         }
 
@@ -106,7 +107,7 @@
             text-decoration: none;
             color: var(--text-main);
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             transition: all 0.3s ease;
         }
 
@@ -132,12 +133,12 @@
             transform: translateY(-2px);
         }
 
-        /* --- Hero Section --- */
+        /* --- Hero --- */
         .hero {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(211, 47, 47, 0.85)), url('https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=80') center/cover;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(211, 47, 47, 0.88)), url('https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1400&q=80') center/cover;
             color: white;
             text-align: center;
-            padding: 5rem 1.5rem 4rem;
+            padding: 4.5rem 1.5rem 5rem;
             border-radius: 0 0 30px 30px;
         }
 
@@ -147,14 +148,14 @@
         }
 
         .hero h2 {
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             font-weight: 700;
             margin-bottom: 1rem;
             line-height: 1.2;
         }
 
         .hero p {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #e2e8f0;
             margin-bottom: 2rem;
             font-weight: 300;
@@ -167,7 +168,7 @@
             flex-wrap: wrap;
         }
 
-        /* --- Contenedores y Secciones --- */
+        /* --- Layout --- */
         .container {
             max-width: 1240px;
             margin: 3rem auto;
@@ -196,18 +197,24 @@
             background: var(--card-bg);
             padding: 2.5rem;
             border-radius: var(--radius-lg);
-            max-width: 650px;
-            margin: -3rem auto 3rem;
+            max-width: 680px;
+            margin: -3.5rem auto 3rem;
             box-shadow: var(--shadow-lg);
             position: relative;
             z-index: 10;
             border: 1px solid var(--border-color);
         }
 
-        .pv-form {
+        .pv-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+
+        .pv-input-wrapper {
             display: flex;
             gap: 0.8rem;
-            margin-top: 1.2rem;
         }
 
         .input-control {
@@ -237,64 +244,105 @@
 
         .btn-main:hover {
             background: var(--primary-hover);
-            transform: translateY(-1px);
         }
 
-        /* Resultado PV */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Resultados PV */
         .pv-result-box {
             display: none;
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: #f1f5f9;
+            margin-top: 1.8rem;
+            padding: 1.8rem;
+            background: #ffffff;
             border-radius: var(--radius-md);
-            border-left: 5px solid var(--secondary);
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
             animation: fadeIn 0.4s ease-in-out;
         }
 
-        .pv-result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #cbd5e1;
+        .pv-client-header {
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
-        .pv-status-badge {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .pv-metrics {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .pv-metric-card {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .pv-metric-card label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .pv-metric-card span {
-            font-size: 1.4rem;
+        .pv-client-name {
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--dark);
+        }
+
+        .pv-client-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .pv-big-score {
+            text-align: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pv-big-score .number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .pv-big-score .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+
+        /* Barras de Metas */
+        .goal-item {
+            margin-bottom: 1rem;
+        }
+
+        .goal-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .pv-error-box {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-size: 0.9rem;
         }
 
         /* --- Catálogo --- */
@@ -304,11 +352,6 @@
             gap: 1.2rem;
             align-items: center;
             margin-bottom: 2.5rem;
-        }
-
-        .search-box {
-            width: 100%;
-            max-width: 450px;
         }
 
         .filter-tabs {
@@ -325,7 +368,7 @@
             border-radius: 30px;
             cursor: pointer;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-main);
             transition: all 0.3s ease;
         }
@@ -339,8 +382,8 @@
 
         .grid-products {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1.8rem;
         }
 
         .card-product {
@@ -355,12 +398,12 @@
         }
 
         .card-product:hover {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
 
         .product-body {
-            padding: 1.5rem;
+            padding: 1.4rem;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -376,7 +419,7 @@
         .pv-badge {
             background: #e0f2fe;
             color: #0369a1;
-            padding: 0.2rem 0.6rem;
+            padding: 0.25rem 0.6rem;
             border-radius: 6px;
             font-size: 0.78rem;
             font-weight: 700;
@@ -389,16 +432,16 @@
         }
 
         .product-title {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--dark);
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .product-desc {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             flex-grow: 1;
         }
 
@@ -407,12 +450,12 @@
             justify-content: space-between;
             align-items: flex-end;
             margin-top: auto;
-            padding-top: 1rem;
+            padding-top: 0.8rem;
             border-top: 1px dashed var(--border-color);
         }
 
         .member-price-val {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--secondary);
             display: block;
@@ -420,7 +463,7 @@
         }
 
         .public-price-val {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             text-decoration: line-through;
         }
@@ -429,9 +472,9 @@
             background: var(--dark);
             color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.9rem;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             transition: background 0.3s;
         }
@@ -440,40 +483,87 @@
             background: var(--primary);
         }
 
-        /* --- Membresía e Información --- */
-        .info-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            background: white;
-            padding: 2.5rem;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
+        /* --- Panel de Administración --- */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
         }
 
-        .feature-list {
-            list-style: none;
+        .admin-card {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-admin {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .admin-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
             margin-top: 1rem;
         }
 
-        .feature-list li {
-            position: relative;
-            padding-left: 1.8rem;
-            margin-bottom: 0.8rem;
-            font-size: 0.95rem;
-            color: var(--text-main);
+        .admin-table th, .admin-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
         }
 
-        .feature-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--secondary);
-            font-weight: bold;
+        .admin-table th {
+            background: #f8fafc;
+            color: var(--dark);
         }
 
-        /* --- Footer --- */
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        /* --- Footer & Flotante --- */
         footer {
             background: var(--dark);
             color: #94a3b8;
@@ -502,19 +592,41 @@
             margin-top: 2.5rem;
             border-top: 1px solid #1e293b;
             font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1240px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .admin-link {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .admin-link:hover {
+            color: #white;
         }
 
         .whatsapp-float {
             position: fixed;
-            width: 60px;
-            height: 60px;
+            width: 58px;
+            height: 58px;
             bottom: 25px;
             right: 25px;
             background-color: #25d366;
             color: white;
             border-radius: 50px;
             text-align: center;
-            font-size: 30px;
+            font-size: 28px;
             box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
             z-index: 1000;
             display: flex;
@@ -534,27 +646,17 @@
         }
 
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            nav ul {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .hero h2 {
-                font-size: 2rem;
-            }
-            .pv-form {
-                flex-direction: column;
-            }
+            .header-container { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .hero h2 { font-size: 2rem; }
+            .pv-input-wrapper { flex-direction: column; }
+            .footer-bottom { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header / Navegación -->
+    <!-- Header -->
     <header>
         <div class="header-container">
             <a href="#inicio" class="logo">
@@ -569,8 +671,7 @@
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#puntos">Mis PV</a></li>
                     <li><a href="#catalogo">Catálogo</a></li>
-                    <li><a href="#membresia">Membresía</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="#contacto">Ubicación</a></li>
                     <li>
                         <a href="https://wa.me/593990689086" target="_blank" class="btn-whatsapp-header">
                             💬 0990689086
@@ -581,83 +682,101 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="inicio" class="hero">
         <div class="hero-content">
             <h2>DXN Salud, Bienestar & Libertad</h2>
-            <p>Descubre el poder del Ganoderma Lucidum y transforma tu estilo de vida con productos 100% orgánicos y de alta calidad.</p>
+            <p>Descubre el poder del Ganoderma Lucidum y transforma tu estilo de vida con productos 100% orgánicos de la más alta calidad.</p>
             <div class="hero-btns">
                 <a href="#catalogo" class="btn-main" style="background: var(--secondary);">Ver Productos</a>
-                <a href="#membresia" class="btn-main" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(5px);">Afíliate con Nosotros</a>
+                <a href="#puntos" class="btn-main" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(5px);">Consultar Mis Puntos</a>
             </div>
         </div>
     </section>
 
-    <!-- Consulta de PV Interactiva -->
+    <!-- Consulta de PV -->
     <section id="puntos" class="container">
         <div class="pv-card">
             <div style="text-align: center;">
-                <h3 style="font-size: 1.4rem; color: var(--dark);">Consultar Mis Puntos de Volumen (PV)</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.2rem;">
-                    Ingresa tu número de cédula o código de distribuidor DXN para verificar tu acumulado
+                <h3 style="font-size: 1.35rem; color: var(--dark);">Consultar Mis Puntos de Volumen (PV)</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.2rem;">
+                    Revisa los PV de tus compras registradas
                 </p>
             </div>
 
-            <form class="pv-form" onsubmit="consultarPV(event)">
-                <input type="text" id="codigoInput" class="input-control" placeholder="Ej: 818000000 o N° Cédula..." required>
-                <button type="submit" id="btnBuscar" class="btn-main">Consultar</button>
+            <form class="pv-form-group" onsubmit="buscarPV(event)">
+                <div class="pv-input-wrapper">
+                    <input type="text" id="cedulaInput" class="input-control" placeholder="Ingresa tu número de cédula o código..." required>
+                    <button type="submit" id="btnBuscarPV" class="btn-main">Consultar mis PV</button>
+                </div>
+
+                <label class="checkbox-container">
+                    <input type="checkbox" id="checkConsentimiento" required>
+                    Confirmo que consulto mi propia información.
+                </label>
             </form>
 
+            <div id="pvErrorBox" class="pv-error-box">
+                <strong>No encontramos compras registradas</strong><br>
+                Verifica tu documento o contáctanos por WhatsApp para actualizar tus compras.
+            </div>
+
             <div id="pvResultBox" class="pv-result-box">
-                <div class="pv-result-header">
-                    <div>
-                        <strong id="resNombre" style="font-size: 1.1rem; color: var(--dark);">Distribuidor DXN</strong>
-                        <div id="resCodigo" style="font-size: 0.8rem; color: var(--text-muted);">Cód: 818000000</div>
-                    </div>
-                    <span class="pv-status-badge">● Afiliado Activo</span>
+                <div class="pv-client-header">
+                    <div class="pv-client-name" id="resNombreCliente">Nombre del Cliente</div>
+                    <div class="pv-client-meta" id="resFechaMes">PV acumulados en octubre de 2026</div>
                 </div>
 
-                <div class="pv-metrics">
-                    <div class="pv-metric-card">
-                        <label>PV Acumulados</label>
-                        <span id="resPV">145.20</span>
+                <div class="pv-big-score">
+                    <div class="number" id="resPVTotal">0.00 PV</div>
+                    <div class="label" id="resComparativaMes">Ves el mismo ritmo que en septiembre de 2026: 0.00 PV</div>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-info">
+                        <span>Meta 30 PV (Calificación)</span>
+                        <span id="labelMeta30">Faltan 30.00 PV</span>
                     </div>
-                    <div class="pv-metric-card">
-                        <label>SV Acumulados</label>
-                        <span id="resSV">192.00</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="barMeta30"></div>
                     </div>
                 </div>
 
-                <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
-                    Estatus: <strong id="resRango" style="color: var(--primary);">Distribuidor Calificado</strong>
+                <div class="goal-item">
+                    <div class="goal-info">
+                        <span>Meta 100 PV (Rubí / Diamante)</span>
+                        <span id="labelMeta100">Faltan 100.00 PV</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="barMeta100"></div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Catálogo de Productos -->
+    <!-- Catálogo DXN Ecuador -->
     <section id="catalogo" class="container">
         <div class="section-header">
-            <h2 class="section-title">Catálogo de Productos DXN</h2>
+            <h2 class="section-title">Catálogo Completo de Productos</h2>
             <p class="section-subtitle">Precios oficiales para Afiliados y Público General</p>
         </div>
 
         <div class="catalog-controls">
-            <div class="search-box">
-                <input type="text" id="searchInput" class="input-control" placeholder="🔍 Buscar producto (ej. Café, Spirulina, Jabón)..." onkeyup="filtrarProductos()">
+            <div style="width: 100%; max-width: 480px;">
+                <input type="text" id="searchInput" class="input-control" placeholder="🔍 Buscar producto (ej. Vita Café, Spirulina, Cocozhi)..." onkeyup="filtrarProductos()">
             </div>
 
             <div class="filter-tabs">
                 <button class="filter-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
-                <button class="filter-btn" onclick="filtrarCategoria('bebidas', this)">Alimentos y Bebidas</button>
-                <button class="filter-btn" onclick="filtrarCategoria('cuidado', this)">Cuidado Personal</button>
+                <button class="filter-btn" onclick="filtrarCategoria('bebidas', this)">Bebidas & Cafés</button>
                 <button class="filter-btn" onclick="filtrarCategoria('suplementos', this)">Suplementos</button>
+                <button class="filter-btn" onclick="filtrarCategoria('cuidado', this)">Cuidado Personal</button>
             </div>
         </div>
 
         <div class="grid-products" id="gridProductos">
-
-            <!-- Producto 1 -->
             <div class="card-product" data-categoria="bebidas">
                 <div class="product-body">
                     <div class="tags-container">
@@ -665,7 +784,7 @@
                         <span class="category-tag">Bebidas</span>
                     </div>
                     <h3 class="product-title">Lingzhi Black Coffee</h3>
-                    <p class="product-desc">Café negro soluble enriquecido con extracto puro de Ganoderma Lucidum.</p>
+                    <p class="product-desc">Café negro soluble orgánico con extracto puro de Ganoderma Lucidum. Cero azúcar.</p>
                     <div class="price-row">
                         <div>
                             <span class="member-price-val">$18.50 <small style="font-size:0.7rem; color:var(--secondary);">(Afiliado)</small></span>
@@ -676,15 +795,14 @@
                 </div>
             </div>
 
-            <!-- Producto 2 -->
             <div class="card-product" data-categoria="bebidas">
                 <div class="product-body">
                     <div class="tags-container">
                         <span class="pv-badge">11.50 PV | 15.50 SV</span>
                         <span class="category-tag">Bebidas</span>
                     </div>
-                    <h3 class="product-title">Lingzhi 3 en 1</h3>
-                    <p class="product-desc">Mezcla suave de café con crema vegetal y extracto natural de Ganoderma.</p>
+                    <h3 class="product-title">Lingzhi Coffee 3 en 1</h3>
+                    <p class="product-desc">Café gourmet con crema vegetal natural y Ganoderma. Sabor suave y cremoso.</p>
                     <div class="price-row">
                         <div>
                             <span class="member-price-val">$19.00 <small style="font-size:0.7rem; color:var(--secondary);">(Afiliado)</small></span>
@@ -695,7 +813,6 @@
                 </div>
             </div>
 
-            <!-- Producto 3 -->
             <div class="card-product" data-categoria="bebidas">
                 <div class="product-body">
                     <div class="tags-container">
@@ -703,7 +820,7 @@
                         <span class="category-tag">Bebidas</span>
                     </div>
                     <h3 class="product-title">Cocozhi</h3>
-                    <p class="product-desc">Deliciosa bebida de cacao natural con micelio de Ganoderma para toda la familia.</p>
+                    <p class="product-desc">Bebida nutritiva de cacao enriquecida con micelio de Ganoderma (GL). Ideal para niños y adultos.</p>
                     <div class="price-row">
                         <div>
                             <span class="member-price-val">$21.50 <small style="font-size:0.7rem; color:var(--secondary);">(Afiliado)</small></span>
@@ -713,170 +830,233 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Producto 4 -->
-            <div class="card-product" data-categoria="cuidado">
-                <div class="product-body">
-                    <div class="tags-container">
-                        <span class="pv-badge">6.00 PV | 8.00 SV</span>
-                        <span class="category-tag">Cuidado Personal</span>
-                    </div>
-                    <h3 class="product-title">Ganozhi Pasta Dental</h3>
-                    <p class="product-desc">Pasta dental 100% natural con Ganoderma, libre de flúor y sacarina.</p>
-                    <div class="price-row">
-                        <div>
-                            <span class="member-price-val">$9.50 <small style="font-size:0.7rem; color:var(--secondary);">(Afiliado)</small></span>
-                            <span class="public-price-val">P. Público: $14.25</span>
-                        </div>
-                        <a href="https://wa.me/593990689086?text=Hola!%20Deseo%20pedir%20Ganozhi%20Pasta%20Dental" target="_blank" class="btn-order">Pedir</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 5 -->
-            <div class="card-product" data-categoria="cuidado">
-                <div class="product-body">
-                    <div class="tags-container">
-                        <span class="pv-badge">7.50 PV | 9.80 SV</span>
-                        <span class="category-tag">Cuidado Personal</span>
-                    </div>
-                    <h3 class="product-title">Aceite de Masaje Gano</h3>
-                    <p class="product-desc">Aceite de palma refinado con extracto de Ganoderma, ideal para alivio y relajación muscular.</p>
-                    <div class="price-row">
-                        <div>
-                            <span class="member-price-val">$12.00 <small style="font-size:0.7rem; color:var(--secondary);">(Afiliado)</small></span>
-                            <span class="public-price-val">P. Público: $18.00</span>
-                        </div>
-                        <a href="https://wa.me/593990689086?text=Hola!%20Deseo%20pedir%20Aceite%20de%20Masaje%20Gano" target="_blank" class="btn-order">Pedir</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 6 -->
-            <div class="card-product" data-categoria="suplementos">
-                <div class="product-body">
-                    <div class="tags-container">
-                        <span class="pv-badge">18.00 PV | 24.00 SV</span>
-                        <span class="category-tag">Suplementos</span>
-                    </div>
-                    <h3 class="product-title">Spirulina DXN</h3>
-                    <p class="product-desc">Superalimento natural rico en proteínas, vitaminas y nutrientes para el día a día.</p>
-                    <div class="price-row">
-                        <div>
-                            <span class="member-price-val">$32.00 <small style="font-size:0.7rem; color:var(--secondary);">(Afiliado)</small></span>
-                            <span class="public-price-val">P. Público: $48.00</span>
-                        </div>
-                        <a href="https://wa.me/593990689086?text=Hola!%20Deseo%20pedir%20Spirulina" target="_blank" class="btn-order">Pedir</a>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
-    <!-- Membresía -->
-    <section id="membresia" class="container">
-        <div class="info-card-grid">
-            <div>
-                <h3 style="color: var(--primary); font-size: 1.4rem;"> Obten tu Código de Afiliado DXN</h3>
-                <ul class="feature-list">
-                    <li>Descuentos inmediatos desde el 30% hasta el 50% en todas tus compras.</li>
-                    <li>Sin consumos mínimos obligatorios al mes. Tu código no vence.</li>
-                    <li>Acceso al plan de beneficios y comisiones internacionales.</li>
-                    <li>Asesoría y acompañamiento directo en tus productos.</li>
-                </ul>
-            </div>
-            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px;">
-                <h3 style="color: var(--dark); font-size: 1.2rem;">¿Quieres Afiliarte Hoy?</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0.5rem 0 1.2rem;">
-                    Escríbenos directamente para registrarte y recibir tu código de descuento en pocos minutos.
-                </p>
-                <a href="https://wa.me/593990689086?text=Hola,%20deseo%20afiliarme%20y%20obtener%20mi%20codigo%20DXN" target="_blank" class="btn-main" style="text-decoration: none; display: inline-block;">
-                    Quiero Afiliarme por WhatsApp
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Ubicación y Contacto -->
+    <!-- Ubicación -->
     <section id="contacto" class="container">
-        <div class="info-card-grid">
-            <div>
-                <h3 style="color: var(--dark); margin-bottom: 0.8rem;">📍 Nuestra Ubicación</h3>
-                <p><strong>Dirección:</strong> Calle Salustio Giler y Avenida Esperanza (junto a Comercial Don Diego)</p>
-                <p style="margin-top: 0.4rem;"><strong>Sector:</strong> El Carmen, Manabí, Ecuador</p>
-                <p style="margin-top: 0.5rem;"><strong>WhatsApp / Pedidos:</strong> <a href="https://wa.me/593990689086" target="_blank" style="color: var(--secondary); font-weight: 600;">0990689086</a></p>
-            </div>
-            <div>
-                <h3 style="color: var(--dark); margin-bottom: 0.8rem;">🕒 Horarios de Atención</h3>
-                <p><strong>Lunes a Viernes:</strong> 08:00 - 18:00</p>
-                <p style="margin-top: 0.4rem;"><strong>Sábados:</strong> 08:30 - 16:00</p>
-                <p style="margin-top: 0.4rem;"><strong>Domingos:</strong> Previa consulta por WhatsApp</p>
-            </div>
+        <div style="background: white; padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border-color);">
+            <h3 style="color: var(--dark); margin-bottom: 0.8rem; font-size: 1.3rem;">📍 Dirección y Contacto Directo</h3>
+            <p><strong>Ubicación:</strong> Calle Salustio Giler y Avenida Esperanza (junto a Comercial Don Diego)</p>
+            <p style="margin-top: 0.3rem;"><strong>Ciudad:</strong> El Carmen, Manabí, Ecuador</p>
+            <p style="margin-top: 0.3rem;"><strong>WhatsApp Directo:</strong> <a href="https://wa.me/593990689086" target="_blank" style="color: var(--secondary); font-weight: 600;">0990689086</a></p>
         </div>
     </section>
+
+    <!-- Ventana Modal del Panel de Administración -->
+    <div id="adminModal" class="admin-modal">
+        <div class="admin-card">
+            <div class="admin-header">
+                <h3>⚙️ Panel de Administración de Clientes</h3>
+                <button class="close-admin" onclick="cerrarAdmin()">✕</button>
+            </div>
+
+            <form onsubmit="guardarCliente(event)">
+                <h4 style="margin-bottom: 0.8rem; font-size: 0.95rem;">Añadir / Actualizar Cliente</h4>
+                <div class="admin-form-grid">
+                    <input type="text" id="adminCedula" class="input-control" placeholder="Cédula / Código" required>
+                    <input type="text" id="adminNombre" class="input-control" placeholder="Nombre completo" required>
+                    <input type="number" step="0.01" id="adminPVActual" class="input-control" placeholder="PV Mes Actual" required>
+                    <input type="number" step="0.01" id="adminPVAnterior" class="input-control" placeholder="PV Mes Anterior" required>
+                </div>
+                <button type="submit" class="btn-main" style="width: 100%; background: var(--secondary);">Guardar / Actualizar Cliente</button>
+            </form>
+
+            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--border-color);">
+
+            <h4 style="margin-bottom: 0.8rem; font-size: 0.95rem;">Lista de Clientes Registrados</h4>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>PV Octubre</th>
+                            <th>PV Septiembre</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaClientesBody">
+                        <!-- Se llena con JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
                 <h3>DXN Salud & Vida</h3>
-                <p>Distribuidor independiente comprometido con tu salud y bienestar natural a través de Ganoderma Lucidum.</p>
+                <p>Distribución autorizada de productos de salud, nutrición y cuidado personal orgánico.</p>
             </div>
             <div class="footer-col">
-                <h3>Contacto Rápido</h3>
-                <p>WhatsApp: <a href="https://wa.me/593990689086" style="color: var(--secondary); text-decoration: none;">+593 990 689 086</a></p>
-                <p>Ubicación: Calle Salustio Giler y Av. Esperanza, junto a Comercial Don Diego.</p>
+                <h3>Atención al Cliente</h3>
+                <p>WhatsApp: 0990689086</p>
+                <p>Calle Salustio Giler y Av. Esperanza, junto a Comercial Don Diego.</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 DXN Salud & Vida - Distribuidor Autorizado. Todos los derechos reservados.</p>
+            <p>&copy; 2026 DXN Salud & Vida - Todos los derechos reservados.</p>
+            <span class="admin-link" onclick="solicitarAccesoAdmin()">⚙️ Acceso Administrador</span>
         </div>
     </footer>
 
-    <!-- Botón Flotante -->
-    <a href="https://wa.me/593990689086?text=Hola,%20quisiera%20mas%20informacion" class="whatsapp-float" target="_blank" title="Contactar por WhatsApp">💬</a>
+    <!-- Flotante -->
+    <a href="https://wa.me/593990689086?text=Hola,%20quisiera%20consultar%20sobre%20los%20productos" class="whatsapp-float" target="_blank">💬</a>
 
-    <!-- Lógica de JavaScript -->
     <script>
-        // Consulta de PV
-        function consultarPV(event) {
+        // Clave predeterminada de administrador
+        const PIN_ADMIN = "1234";
+
+        // Base de datos inicial (Si el almacenamiento del navegador está vacío)
+        const clientesIniciales = {
+            "2350071896": { nombre: "Pablo E. C. V.", pvOctubre: 0.00, pvSeptiembre: 0.00 },
+            "1234567890": { nombre: "María José G. M.", pvOctubre: 45.20, pvSeptiembre: 32.10 }
+        };
+
+        // Obtener clientes guardados o usar los iniciales
+        function obtenerClientesBD() {
+            const dataGuardada = localStorage.getItem('dxn_base_datos');
+            if (dataGuardada) {
+                return JSON.parse(dataGuardada);
+            } else {
+                localStorage.setItem('dxn_base_datos', JSON.stringify(clientesIniciales));
+                return clientesIniciales;
+            }
+        }
+
+        // Búsqueda del cliente
+        function buscarPV(event) {
             event.preventDefault();
-            
-            const codigo = document.getElementById('codigoInput').value.trim();
-            const btn = document.getElementById('btnBuscar');
+
+            const cedula = document.getElementById('cedulaInput').value.trim();
+            const btn = document.getElementById('btnBuscarPV');
             const resultBox = document.getElementById('pvResultBox');
+            const errorBox = document.getElementById('pvErrorBox');
 
-            if(!codigo) return;
+            if(!cedula) return;
 
-            btn.innerHTML = 'Buscando...';
+            btn.innerHTML = 'Consultando...';
             btn.style.opacity = '0.7';
 
             setTimeout(() => {
-                btn.innerHTML = 'Consultar';
+                btn.innerHTML = 'Consultar mis PV';
                 btn.style.opacity = '1';
 
-                const numSemilla = parseInt(codigo.replace(/\D/g, '')) || 81800;
-                const pvCalculado = (100 + (numSemilla % 250)).toFixed(2);
-                const svCalculado = (pvCalculado * 1.35).toFixed(2);
+                const bd = obtenerClientesBD();
 
-                document.getElementById('resCodigo').innerText = 'Cód / Doc: ' + codigo;
-                document.getElementById('resPV').innerText = pvCalculado;
-                document.getElementById('resSV').innerText = svCalculado;
+                if (bd[cedula]) {
+                    const cliente = bd[cedula];
+                    errorBox.style.display = 'none';
 
-                resultBox.style.display = 'block';
-                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 600);
+                    document.getElementById('resNombreCliente').innerText = "Hola, " + cliente.nombre;
+                    document.getElementById('resPVTotal').innerText = Number(cliente.pvOctubre).toFixed(2) + ' PV';
+                    document.getElementById('resComparativaMes').innerText = `Ves el mismo ritmo que en septiembre de 2026: ${Number(cliente.pvSeptiembre).toFixed(2)} PV`;
+
+                    const pvActual = Number(cliente.pvOctubre);
+
+                    // Meta 30
+                    const falta30 = Math.max(0, 30 - pvActual);
+                    const pct30 = Math.min(100, (pvActual / 30) * 100);
+                    document.getElementById('barMeta30').style.width = pct30 + '%';
+                    document.getElementById('labelMeta30').innerText = falta30 === 0 ? '¡Meta Completada! 🎉' : `Faltan ${falta30.toFixed(2)} PV`;
+
+                    // Meta 100
+                    const falta100 = Math.max(0, 100 - pvActual);
+                    const pct100 = Math.min(100, (pvActual / 100) * 100);
+                    document.getElementById('barMeta100').style.width = pct100 + '%';
+                    document.getElementById('labelMeta100').innerText = falta100 === 0 ? '¡Meta Completada! 🎉' : `Faltan ${falta100.toFixed(2)} PV`;
+
+                    resultBox.style.display = 'block';
+                    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    resultBox.style.display = 'none';
+                    errorBox.style.display = 'block';
+                    errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }, 400);
         }
 
-        // Filtro por Categoría
-        function filtrarCategoria(categoria, elemento) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        // --- LÓGICA DE ADMINISTRACIÓN ---
+        function solicitarAccesoAdmin() {
+            const claveIngresada = prompt("Ingresa el PIN de seguridad de Administrador:");
+            if (claveIngresada === PIN_ADMIN) {
+                renderizarTablaAdmin();
+                document.getElementById('adminModal').style.display = 'flex';
+            } else if (claveIngresada !== null) {
+                alert("PIN incorrecto. Acceso denegado.");
+            }
+        }
+
+        function cerrarAdmin() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function renderizarTablaAdmin() {
+            const bd = obtenerClientesBD();
+            const tbody = document.getElementById('tablaClientesBody');
+            tbody.innerHTML = '';
+
+            Object.keys(bd).forEach(cedula => {
+                const client = bd[cedula];
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cedula}</td>
+                    <td>${client.nombre}</td>
+                    <td>${Number(client.pvOctubre).toFixed(2)}</td>
+                    <td>${Number(client.pvSeptiembre).toFixed(2)}</td>
+                    <td><button class="btn-danger" onclick="eliminarCliente('${cedula}')">Eliminar</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function guardarCliente(e) {
+            e.preventDefault();
+            const cedula = document.getElementById('adminCedula').value.trim();
+            const nombre = document.getElementById('adminNombre').value.trim();
+            const pvActual = parseFloat(document.getElementById('adminPVActual').value);
+            const pvAnterior = parseFloat(document.getElementById('adminPVAnterior').value);
+
+            if (!cedula || !nombre) return;
+
+            const bd = obtenerClientesBD();
+            bd[cedula] = {
+                nombre: nombre,
+                pvOctubre: pvActual,
+                pvSeptiembre: pvAnterior
+            };
+
+            localStorage.setItem('dxn_base_datos', JSON.stringify(bd));
+            
+            // Limpiar inputs
+            document.getElementById('adminCedula').value = '';
+            document.getElementById('adminNombre').value = '';
+            document.getElementById('adminPVActual').value = '';
+            document.getElementById('adminPVAnterior').value = '';
+
+            renderizarTablaAdmin();
+            alert("✅ Cliente guardado con éxito.");
+        }
+
+        function eliminarCliente(cedula) {
+            if (confirm(`¿Seguro que deseas eliminar al cliente con cédula ${cedula}?`)) {
+                const bd = obtenerClientesBD();
+                delete bd[cedula];
+                localStorage.setItem('dxn_base_datos', JSON.stringify(bd));
+                renderizarTablaAdmin();
+            }
+        }
+
+        // Filtros Catálogo
+        function filtrarCategoria(cat, elemento) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             elemento.classList.add('active');
 
-            const productos = document.querySelectorAll('.card-product');
-            productos.forEach(prod => {
-                if (categoria === 'todos' || prod.getAttribute('data-categoria') === categoria) {
+            document.querySelectorAll('.card-product').forEach(prod => {
+                if(cat === 'todos' || prod.getAttribute('data-categoria') === cat) {
                     prod.style.display = 'flex';
                 } else {
                     prod.style.display = 'none';
@@ -884,16 +1064,13 @@
             });
         }
 
-        // Buscador por Texto
         function filtrarProductos() {
-            const texto = document.getElementById('searchInput').value.toLowerCase();
-            const productos = document.querySelectorAll('.card-product');
-
-            productos.forEach(prod => {
-                const titulo = prod.querySelector('.product-title').innerText.toLowerCase();
+            const txt = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.card-product').forEach(prod => {
+                const title = prod.querySelector('.product-title').innerText.toLowerCase();
                 const desc = prod.querySelector('.product-desc').innerText.toLowerCase();
 
-                if (titulo.includes(texto) || desc.includes(texto)) {
+                if(title.includes(txt) || desc.includes(txt)) {
                     prod.style.display = 'flex';
                 } else {
                     prod.style.display = 'none';
@@ -901,6 +1078,5 @@
             });
         }
     </script>
-
 </body>
 </html>
