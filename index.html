@@ -974,27 +974,32 @@
 
         // --- PRODUCTOS DXN ECUADOR ---
         const productos = [
-  { nombre: "Dxn Lingzhi Coffee 3 En 1", distribuidor: 24.60, cliente: 36.60 },
-  { nombre: "Dxn Lingzhi Black Coffee", distribuidor: 24.60, cliente: 36.60 },
-  { nombre: "Dxn White Coffee Zhino", distribuidor: 29.80, cliente: 41.80 },
-  { nombre: "Dxn Cocozhi", distribuidor: 29.80, cliente: 41.80 },
-  { nombre: "Dxn Zhi Mocha", distribuidor: 28.50, cliente: 40.50 },
-  { nombre: "Dxn Spirulina Tablet 120s", distribuidor: 26.40, cliente: 38.40 },
-  { nombre: "Dxn Spirulina Capsula 30s", distribuidor: 7.20, cliente: 19.20 },
-  { nombre: "Dxn Ganozhi Pasta Dental", distribuidor: 13.80, cliente: 18.80 },
-  { nombre: "Dxn Morinzyme", distribuidor: 26.30, cliente: 38.30 },
-  { nombre: "Dxn Morinzhi", distribuidor: 26.30, cliente: 38.30 },
-  { nombre: "Dxn Roselle", distribuidor: 26.30, cliente: 38.30 },
-  { nombre: "Dxn Ganozhi Shampoo", distribuidor: 26.00, cliente: 31.00 },
-  { nombre: "Dxn Ganozhi Gel De Baño", distribuidor: 26.00, cliente: 38.00 },
-  { nombre: "Dxn Aceite De Masaje Gano", distribuidor: 16.90, cliente: 28.90 },
-  { nombre: "Dxn Ganozhi Jabón", distribuidor: 6.90, cliente: 11.90 },
-  { nombre: "Dxn Lions Mane Lemon Matcha", distribuidor: 21.00, cliente: 33.00 },
-  { nombre: "Dxn Non Dairy Creamer", distribuidor: 6.20, cliente: 18.20 },
-  { nombre: "Dxn Zhi Roasted Coffee", distribuidor: 23.30, cliente: 35.30 },
-  { nombre: "Dxn Spirulina Coffe", distribuidor: 25.00, cliente: 37.00 },
-  { nombre: "Dxn Ootea Lingzhi Black Coffe Mix", distribuidor: 24.60, cliente: 36.60 },
-  { nombre: "Dxn Lion Mane Coffee", distribuidor: 24.70, cliente: 36.70 }
+  // BEBIDAS Y CAFÉS
+  { nombre: "Dxn Lingzhi Coffee 3 En 1", categoria: "bebidas", precio: 36.60, cliente: 36.60, distribuidor: 24.60, precioCliente: 36.60, precioDistribuidor: 24.60 },
+  { nombre: "Dxn Lingzhi Black Coffee", categoria: "bebidas", precio: 36.60, cliente: 36.60, distribuidor: 24.60, precioCliente: 36.60, precioDistribuidor: 24.60 },
+  { nombre: "Dxn White Coffee Zhino", categoria: "bebidas", precio: 41.80, cliente: 41.80, distribuidor: 29.80, precioCliente: 41.80, precioDistribuidor: 29.80 },
+  { nombre: "Dxn Cocozhi", categoria: "bebidas", precio: 41.80, cliente: 41.80, distribuidor: 29.80, precioCliente: 41.80, precioDistribuidor: 29.80 },
+  { nombre: "Dxn Zhi Mocha", categoria: "bebidas", precio: 40.50, cliente: 40.50, distribuidor: 28.50, precioCliente: 40.50, precioDistribuidor: 28.50 },
+  { nombre: "Dxn Lions Mane Lemon Matcha", categoria: "bebidas", precio: 33.00, cliente: 33.00, distribuidor: 21.00, precioCliente: 33.00, precioDistribuidor: 21.00 },
+  { nombre: "Dxn Non Dairy Creamer", categoria: "bebidas", precio: 18.20, cliente: 18.20, distribuidor: 6.20, precioCliente: 18.20, precioDistribuidor: 6.20 },
+  { nombre: "Dxn Zhi Roasted Coffee", categoria: "bebidas", precio: 35.30, cliente: 35.30, distribuidor: 23.30, precioCliente: 35.30, precioDistribuidor: 23.30 },
+  { nombre: "Dxn Spirulina Coffe", categoria: "bebidas", precio: 37.00, cliente: 37.00, distribuidor: 25.00, precioCliente: 37.00, precioDistribuidor: 25.00 },
+  { nombre: "Dxn Ootea Lingzhi Black Coffe Mix", categoria: "bebidas", precio: 36.60, cliente: 36.60, distribuidor: 24.60, precioCliente: 36.60, precioDistribuidor: 24.60 },
+  { nombre: "Dxn Lion Mane Coffee", categoria: "bebidas", precio: 36.70, cliente: 36.70, distribuidor: 24.70, precioCliente: 36.70, precioDistribuidor: 24.70 },
+
+  // SUPLEMENTOS
+  { nombre: "Dxn Spirulina Tablet 120s", categoria: "suplementos", precio: 38.40, cliente: 38.40, distribuidor: 26.40, precioCliente: 38.40, precioDistribuidor: 26.40 },
+  { nombre: "Dxn Spirulina Capsula 30s", categoria: "suplementos", precio: 19.20, cliente: 19.20, distribuidor: 7.20, precioCliente: 19.20, precioDistribuidor: 7.20 },
+  { nombre: "Dxn Morinzyme", categoria: "suplementos", precio: 38.30, cliente: 38.30, distribuidor: 26.30, precioCliente: 38.30, precioDistribuidor: 26.30 },
+  { nombre: "Dxn Morinzhi", categoria: "suplementos", precio: 38.30, cliente: 38.30, distribuidor: 26.30, precioCliente: 38.30, precioDistribuidor: 26.30 },
+  { nombre: "Dxn Roselle", categoria: "suplementos", precio: 38.30, cliente: 38.30, distribuidor: 26.30, precioCliente: 38.30, precioDistribuidor: 26.30 },
+
+  // CUIDADO PERSONAL
+  { nombre: "Dxn Ganozhi Pasta Dental", categoria: "cuidado", precio: 18.80, cliente: 18.80, distribuidor: 13.80, precioCliente: 18.80, precioDistribuidor: 13.80 },
+  { nombre: "Dxn Ganozhi Shampoo", categoria: "cuidado", precio: 31.00, cliente: 31.00, distribuidor: 26.00, precioCliente: 31.00, precioDistribuidor: 26.00 },
+  { nombre: "Dxn Ganozhi Gel De Baño", categoria: "cuidado", precio: 38.00, cliente: 38.00, distribuidor: 26.00, precioCliente: 38.00, precioDistribuidor: 26.00 },
+  { nombre: "Dxn Aceite De Masaje Gano", categoria: "cuidado", precio: 28.90, cliente: 28.90, distribuidor: 16.90, precioCliente: 28.90, precioDistribuidor: 16.90 },
+  { nombre: "Dxn Ganozhi Jabón", categoria: "cuidado", precio: 11.90, cliente: 11.90, distribuidor: 6.90, precioCliente: 11.90, precioDistribuidor: 6.90 }
 ];
         function renderizarProductos(categoria = 'todos') {
             const grid = document.getElementById('productsGrid');
